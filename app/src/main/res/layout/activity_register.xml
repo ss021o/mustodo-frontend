@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <TextView
+        android:id="@+id/header_regi"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:text="회원가입"
+        />
+
+    <LinearLayout
+        android:layout_below="@+id/header_regi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/regi_email"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="이메일"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/regi_nick"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="닉네임"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/regi_pass"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="비밀번호"
+            android:inputType="textPassword"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/regi_pass_check"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="비밀번호확인"
+            android:inputType="textPassword"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <CheckBox
+            android:id="@+id/regi_terms_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="머스트투두 서비스 이용약관 동의로 간주합니다." />
+        <Button
+            android:id="@+id/regi_btn"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="다음"/>
+    </LinearLayout>
+
+</RelativeLayout>

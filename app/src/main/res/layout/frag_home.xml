@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="@color/white"
+  >
+        <LinearLayout
+            android:id="@+id/userLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textUserNick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="User Id"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_below="@+id/userLayout"
+            android:id="@+id/first_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="10dp"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="3">
+                    <TextView
+                        android:id="@+id/dateText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2022년 10월"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
+
+                </LinearLayout>
+
+
+                <ImageButton
+                    android:id="@+id/prev_btn"
+                    android:layout_width="12dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/left_arrow"
+                    android:scaleType="fitCenter"
+                    android:background="@color/transparent"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/black"/>
+
+                <ImageButton
+                    android:id="@+id/next_btn"
+                    android:layout_width="12dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/right_arrow"
+                    android:scaleType="fitCenter"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/transparent"
+                    android:textColor="@color/black"/>
+
+                <ToggleButton
+                    android:background="#cccccc"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:checked="true"
+                    android:textOff="주"
+                    android:textOn="월"/>
+
+
+            </LinearLayout>
+
+
+            <com.github.sundeepk.compactcalendarview.CompactCalendarView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/month_view"
+                android:layout_width="match_parent"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:layout_height="250dp"
+                app:compactCalendarTargetHeight="250dp"
+                app:compactCalendarTextSize="12sp"
+                app:compactCalendarBackgroundColor="#fff"
+                app:compactCalendarTextColor="#000"
+                app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
+                app:compactCalendarCurrentDayBackgroundColor="#FFE180"
+                app:compactCalendarMultiEventIndicatorColor="#fff"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+                <Button
+                    android:id="@+id/todoBtn"
+                    android:text="TODO"
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/btn_solid_02"
+                    android:textColor="@color/white"/>
+                <Button
+                    android:id="@+id/projectBtn"
+                    android:text="PROJECT"
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/btn_line_03"
+                    android:textColor="@color/main"/>
+            </LinearLayout>
+
+            <ListView
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:id="@+id/lvtodoItem"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:dividerHeight="15dp"/>
+
+            <ListView
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:id="@+id/lvprojectItem"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:dividerHeight="15dp"/>
+
+
+
+
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical">-->
+<!--                            -->
+<!--                            <com.google.android.material.tabs.TabLayout-->
+<!--                                android:id="@+id/tabs"-->
+<!--                                android:layout_width="250dp"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:layout_height="wrap_content">-->
+
+<!--                                <com.google.android.material.tabs.TabItem-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="TODO"/>-->
+<!--                                <com.google.android.material.tabs.TabItem-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="PROJECT"/>-->
+<!--                            </com.google.android.material.tabs.TabLayout>-->
+
+<!--                            <FrameLayout-->
+<!--                                android:id="@+id/todoFrame"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="600dp"-->
+<!--                                android:layout_weight="1"/>-->
+
+<!--            </LinearLayout>-->
+
+
+
+        </LinearLayout>
+
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/plus"
+        android:backgroundTint="#0062FF"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"/>
+
+
+
+
+</RelativeLayout>
