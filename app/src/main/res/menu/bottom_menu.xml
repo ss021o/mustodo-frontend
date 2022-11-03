@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="Home"/>
+    <item
+        android:id="@+id/action_feed"
+        android:enabled="true"
+        android:icon="@drawable/ic_feed"
+        android:title="Feed"/>
+    <item
+        android:id="@+id/action_mission"
+        android:enabled="true"
+        android:icon="@drawable/ic_mission"
+        android:title="Mission"/>
+    <item
+        android:id="@+id/action_my"
+        android:enabled="true"
+        android:icon="@drawable/ic_my"
+        android:title="My"/>
+</menu>
