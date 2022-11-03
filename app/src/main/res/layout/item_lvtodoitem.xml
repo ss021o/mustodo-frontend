@@ -5,7 +5,8 @@
     android:paddingTop="15dp"
     android:paddingBottom="15dp"
     android:background="@drawable/todo_item1"
-    android:elevation="2dp">
+    android:elevation="2dp"
+    android:layout_margin="5dp">
     <CheckBox
         android:id="@+id/todo_check"
         android:button="@android:color/transparent"
