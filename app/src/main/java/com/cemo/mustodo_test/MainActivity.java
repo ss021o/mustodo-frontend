@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
 
         Intent intent = getIntent();
-        String userNick =intent.getExtras().getString("userNick");
+        String userNick =intent.getExtras().getString("email");
 
 
         bottomNavigationView = findViewById(R.id.bottomNavi);

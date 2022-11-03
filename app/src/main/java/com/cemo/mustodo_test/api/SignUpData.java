@@ -19,6 +19,14 @@ public class SignUpData {
     @SerializedName("termsAndConditions")
     private Boolean userTermCheck;
 
+    public String getEmail(){
+        return userEmail;
+    }
+
+    public String getNick(){
+        return userName;
+    }
+
     public SignUpData(String userEmail, String userName, String userPassword, String userPasswordCheck, Boolean userTermCheck) {
         this.userName = userName;
         this.userEmail = userEmail;
