@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginRequest extends StringRequest {
-    final static private String Test_URL = "https://127.0.0.1:8080/api/auth/login";
+    final static private String Test_URL = "http://192.168.0.93:8080/api/auth/login";
+
+    //http://192.168.0.93:8080/api/auth/sign-up
 
     private Map<String, String> map;
 
