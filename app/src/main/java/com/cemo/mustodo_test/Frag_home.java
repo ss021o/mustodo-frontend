@@ -1,15 +1,13 @@
 package com.cemo.mustodo_test;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,18 +15,26 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.cemo.mustodo_test.api.RetrofitClient;
+import com.cemo.mustodo_test.api.ServiceInterface;
+import com.cemo.mustodo_test.api.todo.CategoryTodoResponse;
+import com.cemo.mustodo_test.api.todo.TodoData;
+import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Frag_home extends Fragment {
     private View view;
@@ -41,14 +47,15 @@ public class Frag_home extends Fragment {
 
     String userNick;
 
-    ArrayList<TodoData> todoDataList;
+    List<CategoryTodoResponse> categoryTodoList;
 
     private Button todoBtn, projectBtn;
     Boolean activeBtn;
 
-    private ListView todoView;
+    private ExpandableListView todoView;
     private ListView projectView;
 
+    private TodoServiceInterface service;
 
     @SuppressLint("ResourceAsColor")
     @Nullable
@@ -67,7 +74,7 @@ public class Frag_home extends Fragment {
         todoBtn = view.findViewById(R.id.todoBtn);
         projectBtn = view.findViewById(R.id.projectBtn);
 
-        todoView = view.findViewById(R.id.lvtodoItem);
+        todoView = view.findViewById(R.id.lvTodoList);
         projectView = view.findViewById(R.id.lvprojectItem);
 
         todoBtn.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +82,6 @@ public class Frag_home extends Fragment {
             public void onClick(View v) {
                 activeBtn = true;
                 SetBtnFocus(activeBtn);
-
             }
         });
 
@@ -90,24 +96,36 @@ public class Frag_home extends Fragment {
         activeBtn = true;
         SetBtnFocus(activeBtn);
 
+        service = RetrofitClient.getClient().create(TodoServiceInterface.class);
 
-        this.InitializeTodoData();
 
-        ListView listView = (ListView)view.findViewById(R.id.lvtodoItem);
-
-        final TodoAdapter myAdapter = new TodoAdapter(getContext(),todoDataList);
-
-        listView.setAdapter(myAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormatter.format(new Date(System.currentTimeMillis()));
+        service.todoByDate(formattedDate).enqueue(new Callback<List<CategoryTodoResponse>>() {
             @Override
-            public void onItemClick(AdapterView parent, View v, int position, long id){
-                Toast.makeText(view.getContext(),
-                        myAdapter.getItem(position).getTodoText(),
-                        Toast.LENGTH_LONG).show();
+            public void onResponse(Call<List<CategoryTodoResponse>> call, Response<List<CategoryTodoResponse>> response) {
+                if (response.isSuccessful()) {
+                    categoryTodoList = response.body();
+                    final TodoAdapter adapter = new TodoAdapter(getContext(), categoryTodoList);
+                    todoView.setAdapter(adapter);
+                    todoView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                        @Override
+                        public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
+                            Toast.makeText(view.getContext(), adapter.getChild(groupPosition, childPosition).getContent(), Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+                    showTodo(adapter);
+                } else {
+                    Log.d("response", "fail");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryTodoResponse>> call, Throwable t) {
+
             }
         });
-
 
         final CompactCalendarView monthView = (CompactCalendarView) view.findViewById(R.id.month_view);
 
@@ -123,7 +141,7 @@ public class Frag_home extends Fragment {
         monthView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
-
+                setTodoListByDate(dateClicked);
             }
 
             @Override
@@ -149,19 +167,31 @@ public class Frag_home extends Fragment {
         return  view;
     }
 
-    public void InitializeTodoData()
-    {
-        todoDataList = new ArrayList<TodoData>();
+    private void setTodoListByDate(Date date) {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormatter.format(date);
+        service.todoByDate(formattedDate).enqueue(new Callback<List<CategoryTodoResponse>>() {
+            @Override
+            public void onResponse(Call<List<CategoryTodoResponse>> call, Response<List<CategoryTodoResponse>> response) {
+                if (response.isSuccessful()) {
+                    categoryTodoList = response.body();
+                    final TodoAdapter adapter = new TodoAdapter(getContext(),categoryTodoList);
+                    todoView.setAdapter(adapter);
+                    showTodo(adapter);
+                }
+            }
 
-        todoDataList.add(new TodoData(false, "캡스톤01","4days"));
-        todoDataList.add(new TodoData(false, "캡스톤02","2days"));
-        todoDataList.add(new TodoData(false, "캡스톤03","1days"));
-        todoDataList.add(new TodoData(false, "캡스톤04","4days"));
-        todoDataList.add(new TodoData(false, "캡스톤05","2days"));
-        todoDataList.add(new TodoData(false, "캡스톤06","1days"));
-        todoDataList.add(new TodoData(false, "캡스톤07","4days"));
-        todoDataList.add(new TodoData(false, "캡스톤08","2days"));
-        todoDataList.add(new TodoData(false, "캡스톤09","1days"));
+            @Override
+            public void onFailure(Call<List<CategoryTodoResponse>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void showTodo(TodoAdapter adapter) {
+        for (int i = 0; i < adapter.getGroupCount(); i++) {
+            todoView.expandGroup(i);
+        }
     }
 
     public void SetBtnFocus(boolean check)
