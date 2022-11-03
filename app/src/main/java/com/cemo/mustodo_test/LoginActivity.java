@@ -10,6 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText LoginEmail;
@@ -45,6 +52,38 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 }
+
+
+                Response.Listener<String> responseListner = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean isSuccess  = false;
+
+                            if(isSuccess){
+                                Toast.makeText(getApplicationContext(),"회원가입에 성공하였습니다.", Toast.LENGTH_SHORT ).show();
+
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+
+                            }else{
+                                Toast.makeText(getApplicationContext(),"회원가입에 실패하였습니다.", Toast.LENGTH_SHORT ).show();
+                                return;
+                            }
+                        }catch (Error e) {
+                            e.printStackTrace();
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                };
+
+                LoginRequest loginRequset = new LoginRequest(userEmail, userPassword, responseListner);
+                RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+                queue.add(loginRequset);
 
             }
         });

@@ -71,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"이용약관을 동의해주세요", Toast.LENGTH_SHORT ).show();
                 }else{
                     Regi_btn.setBackgroundResource(R.color.main);
-                    Regi_btn.setTextColor(R.color.white);
+                    Regi_btn.setTextColor(getResources().getColor(R.color.white));
 
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     intent.putExtra("userNick", userNick);
@@ -89,8 +89,8 @@ public class RegisterActivity extends AppCompatActivity {
                             if(isSuccess){
                                 Toast.makeText(getApplicationContext(),"회원가입에 성공하였습니다.", Toast.LENGTH_SHORT ).show();
 
-                                //Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                //startActivity(intent);
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                startActivity(intent);
 
                             }else{
                                 Toast.makeText(getApplicationContext(),"회원가입에 실패하였습니다.", Toast.LENGTH_SHORT ).show();
