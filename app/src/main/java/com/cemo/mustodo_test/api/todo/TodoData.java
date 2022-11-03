@@ -1,4 +1,4 @@
-package com.cemo.mustodo_test;
+package com.cemo.mustodo_test.api.todo;
 
 public class TodoData {
     private String todo_text;
