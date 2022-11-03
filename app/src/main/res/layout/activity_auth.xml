@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    tools:context=".AuthActivity">
+
+    <RelativeLayout
+        android:id="@+id/auth_pre_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/loding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/auth_loading"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:layout_below="@+id/loding"
+            android:id="@+id/msg1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="인증을 위해 가입한 이메일로"/>
+        <TextView
+            android:layout_below="@+id/msg1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="인증코드가 발송되었습니다."/>
+
+        <Button
+            android:id="@+id/pre_auth_btn"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_solid_01"
+            android:textColor="@color/white"
+            android:layout_marginTop="120dp"
+            android:text="인증하기"/>
+
+   </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/auth_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/header_auth"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:text="이메일 인증"
+            />
+
+        <EditText
+            android:background="@drawable/input_line_01"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:id="@+id/auth_code_edit"
+            android:layout_below="@+id/header_auth"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:inputType="numberPassword"/>
+
+        <Button
+            android:id="@+id/auth_btn"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_solid_01"
+            android:textColor="@color/white"
+            android:layout_marginTop="120dp"
+            android:text="인증하기"/>
+    </RelativeLayout>
+
+</LinearLayout>
