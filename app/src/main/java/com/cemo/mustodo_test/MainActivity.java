@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private Frag_my frag_my;
 
 
+    private LinearLayout header_menu;
+
+
 
 
     @Override
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String userNick =intent.getExtras().getString("email");
 
+        header_menu = findViewById(R.id.header_menu);
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
 
@@ -62,15 +67,19 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()){
                     case R.id.action_home:
                         setFrag(0);
+                        header_menu.setVisibility(View.VISIBLE);
                         break;
                     case R.id.action_feed:
                         setFrag(1);
+                        header_menu.setVisibility(View.VISIBLE);
                         break;
                     case R.id.action_mission:
                         setFrag(2);
+                        header_menu.setVisibility(View.VISIBLE);
                         break;
                     case R.id.action_my:
                         setFrag(3);
+                        header_menu.setVisibility(View.GONE);
                         break;
                 }
                 return true;

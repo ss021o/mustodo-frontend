@@ -1,6 +1,7 @@
 package com.cemo.mustodo_test;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.cemo.mustodo_test.api.todo.CategoryTodoResponse;
 import com.cemo.mustodo_test.api.todo.TodoData;
 import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.text.SimpleDateFormat;
@@ -50,7 +52,10 @@ public class Frag_home extends Fragment {
     List<CategoryTodoResponse> categoryTodoList;
 
     private Button todoBtn, projectBtn;
-    Boolean activeBtn;
+
+    private FloatingActionButton fab_main, fab_sub1, fab_sub2;
+
+    Boolean activeBtn, isFloating;
 
     private ExpandableListView todoView;
     private ListView projectView;
@@ -94,6 +99,8 @@ public class Frag_home extends Fragment {
         });
 
         activeBtn = true;
+
+        isFloating = false;
         SetBtnFocus(activeBtn);
 
         service = RetrofitClient.getClient().create(TodoServiceInterface.class);
@@ -136,6 +143,36 @@ public class Frag_home extends Fragment {
 
         dateText.setText(dateFormatForMonth.format(monthView.getFirstDayOfCurrentMonth()));
         monthView.setFirstDayOfWeek(Calendar.MONDAY);
+
+
+        fab_main = view.findViewById(R.id.floatingActionButton);
+        fab_sub1 = view.findViewById(R.id.fab_sub1);
+        fab_sub2 = view.findViewById(R.id.fab_sub2);
+
+        fab_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFloating){
+                    fab_sub1.setVisibility(View.INVISIBLE);
+                    fab_sub2.setVisibility(View.INVISIBLE);
+                    isFloating = false;
+                }else {
+                    fab_sub1.setVisibility(View.VISIBLE);
+                    fab_sub2.setVisibility(View.VISIBLE);
+                    isFloating = true;
+                }
+
+            }
+        });
+
+
+        fab_sub1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TodoActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         monthView.setListener(new CompactCalendarView.CompactCalendarViewListener() {

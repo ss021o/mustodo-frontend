@@ -14,7 +14,7 @@
         android:layout_height="60dp"
         android:background="#FFFFFF"
         tools:ignore="MissingConstraints"
-        android:elevation="10dp"
+        android:elevation="5dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -59,7 +59,7 @@
     <FrameLayout
         android:id="@+id/main_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavi"
         app:layout_constraintTop_toBottomOf="@+id/header_menu"
@@ -72,7 +72,7 @@
         android:id="@+id/bottomNavi"
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         app:itemIconTint="@drawable/menu_item_color"
         app:itemTextColor="@drawable/menu_item_color"
         app:layout_constraintBottom_toBottomOf="parent"
