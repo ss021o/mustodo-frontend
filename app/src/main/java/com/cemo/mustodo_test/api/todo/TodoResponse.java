@@ -1,27 +1,45 @@
 package com.cemo.mustodo_test.api.todo;
 
+import com.cemo.mustodo_test.api.UserData;
 import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONArray;
 
 public class TodoResponse {
 
-    @SerializedName("todoId")
-    private Long todoId;
+//    @SerializedName("todoId")
+//    private Long todoId;
+//
+//    @SerializedName("content")
+//    private String content;
+//
+//    @SerializedName("achieved")
+//    private boolean check;
+//
+//    public Long getTodoId() {
+//        return todoId;
+//    }
+//
+//    public String getContent() {
+//        return content;
+//    }
+//
+//    public boolean isCheck() {
+//        return check;
+//    }
 
-    @SerializedName("content")
-    private String content;
+    @SerializedName("code")
+    private int code;
 
-    @SerializedName("achieved")
-    private boolean check;
+    @SerializedName("data")
+    private JSONArray data;
 
-    public Long getTodoId() {
-        return todoId;
+    public int getCode() {
+        return code;
     }
 
-    public String getContent() {
-        return content;
+    public JSONArray getResult() {
+        return data;
     }
 
-    public boolean isCheck() {
-        return check;
-    }
 }

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="15dp"
+    android:background="@drawable/card_white">
+    <Button
+        android:id="@+id/projectSlideHandle"
+        android:layout_width="70dp"
+        android:layout_height="8dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/btn_gray"/>
+
+    <LinearLayout
+        android:id="@+id/projectSlideContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/sheet_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="21sp"
+            android:text="프로젝트 선택"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="15dp"/>
+
+        <ListView
+            android:id="@+id/bt_sheed_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/bottom_sheet_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/btnGroupCreate"
+                android:layout_margin="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/transparent"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:textAlignment="textStart"
+                android:textSize="15sp"
+                android:paddingLeft="10dp"
+                android:text="프로젝트 생성"/>
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/plus_icon"
+                android:background="@drawable/btn_solid_01"
+                android:scaleType="fitCenter"
+                android:padding="10dp"
+                android:layout_marginLeft="5dp"/>
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/bottom_sheet_btn_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:background="@drawable/btn_line_01"
+                android:layout_weight="1"
+                android:text="취소"/>
+            <Button
+                android:id="@+id/btnOk"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:background="@drawable/btn_solid_01"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:text="확인"/>
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+</LinearLayout>

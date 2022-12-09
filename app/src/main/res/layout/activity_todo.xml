@@ -19,6 +19,7 @@
         tools:ignore="MissingConstraints">
 
         <ImageView
+            android:id="@+id/backArrow"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_marginRight="15dp"
@@ -47,8 +48,7 @@
             android:layout_height="60dp"
             android:layout_margin="10dp"
             android:background="@color/white"
-            android:hint="할 일 제목"
-            android:singleLine="true" />
+            android:hint="할 일 제목" />
 
         <LinearLayout
             android:id="@+id/layout_category"
@@ -66,6 +66,7 @@
                 android:src="@drawable/category" />
 
             <Button
+                android:id="@+id/sel_project_btn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/transparent"
@@ -123,12 +124,12 @@
                 android:src="@drawable/bell3" />
 
             <Button
-                android:id="@+id/sel_alarm_btn"
+                android:id="@+id/sel_open_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@drawable/btn_line_01"
                 android:padding="10dp"
-                android:text="15분 전" />
+                android:text="전체 공개" />
 
 
         </LinearLayout>
@@ -160,7 +161,9 @@
 
     </LinearLayout>
 
+
     <Button
+        android:id="@+id/btnTodoCreate"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -168,6 +171,11 @@
         android:textColor="@color/white"
         android:layout_margin="10dp"
         android:text="저장"/>
+
+
+
+
+
 
 
 </RelativeLayout>

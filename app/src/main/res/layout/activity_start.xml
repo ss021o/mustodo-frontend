@@ -51,28 +51,46 @@
 
         <Button
             android:id="@+id/go_register_btn"
-            android:text="회원가입"
+            android:text="시작하기"
             android:layout_width="match_parent"
             android:textColor="@color/main"
             android:background="@drawable/btn_line_01"
             android:layout_marginBottom="10dp"
             android:layout_height="60dp"/>
-        <Button
-            android:id="@+id/go_login_btn"
-            android:text="로그인"
-            android:background="@drawable/btn_solid_01"
-            android:textColor="@color/white"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_height="60dp"/>
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이미 계정이 있다면?"/>
+            <Button
+                android:background="@color/transparent"
+                android:id="@+id/go_login_btn"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/main"
+                android:textStyle="bold"
+                android:text="로그인"/>
+        </LinearLayout>
+<!--        <Button-->
+<!--            android:id="@+id/go_login_btn"-->
+<!--            android:text="로그인"-->
+<!--            android:background="@drawable/btn_solid_01"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:layout_height="60dp"/>-->
         <Button
             android:id="@+id/find_pass_btn"
             android:gravity="center"
-            android:text="비밀번호 찾기"
+            android:text="둘러보기"
             android:background="@color/transparent"
             android:textColor="@color/black"
             android:layout_width="match_parent"
-            android:layout_height="60dp"/>
+            android:layout_height="45dp"/>
 
 
     </LinearLayout>

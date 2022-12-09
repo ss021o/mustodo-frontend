@@ -131,7 +131,8 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if( emailCheck && passwordCheck && nickCheck && termCheck ){
-            startRegister(new SignUpData(userEmail, userNick, userPassword, userPasswordCheck, userTermCheck));
+            //startRegister(new SignUpData(userEmail, userNick, userPassword, userPasswordCheck, userTermCheck));
+            startRegister(new SignUpData(userEmail, userNick, userPassword));
         }
 
     }

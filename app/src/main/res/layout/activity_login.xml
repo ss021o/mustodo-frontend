@@ -20,6 +20,7 @@
         />
 
     <LinearLayout
+        android:id="@+id/login_layout"
         android:layout_below="@+id/header_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,6 +52,13 @@
             android:textColor="@color/black"/>
 
     </LinearLayout>
+
+    <CheckBox
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/login_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="로그인 상태를 유지하시겠습니까?"/>
 
     <LinearLayout
         android:layout_alignParentBottom="true"

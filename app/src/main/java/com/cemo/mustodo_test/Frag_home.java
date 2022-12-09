@@ -1,39 +1,71 @@
 package com.cemo.mustodo_test;
 
+import static java.lang.System.currentTimeMillis;
+
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ExpandableListView;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.cemo.mustodo_test.api.RetrofitClient;
 import com.cemo.mustodo_test.api.ServiceInterface;
-import com.cemo.mustodo_test.api.todo.CategoryTodoResponse;
-import com.cemo.mustodo_test.api.todo.TodoData;
+import com.cemo.mustodo_test.api.UserData;
+import com.cemo.mustodo_test.api.UserResponse;
+import com.cemo.mustodo_test.api.todo.TodoDayData;
+import com.cemo.mustodo_test.api.todo.TodoDayResponse;
+import com.cemo.mustodo_test.api.todo.TodoMonthData;
+import com.cemo.mustodo_test.api.todo.TodoMonthResponse;
+import com.cemo.mustodo_test.api.todo.TodoResponse;
 import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
+import com.cemo.mustodo_test.data.dataControl;
+import com.cemo.mustodo_test.data.dataHelper;
+import com.cemo.mustodo_test.diary.DiaryAdapter;
+import com.cemo.mustodo_test.diary.DiaryData;
+import com.cemo.mustodo_test.todo.TodoAdapter;
+import com.cemo.mustodo_test.todo.TodoData;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,52 +73,78 @@ import retrofit2.Response;
 public class Frag_home extends Fragment {
     private View view;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy년 MM월", Locale.KOREA);
-    private TabLayout tabNavi;
-    private TextView dateText;
-    private ImageButton prevBtn;
-    private ImageButton nextBtn;
-    private TextView textUserNick;
+    private TextView dateText, textUserNick;
+    private ImageButton prevBtn, nextBtn;
 
-    String userNick;
-
-    List<CategoryTodoResponse> categoryTodoList;
+    private ImageView profile_view;
 
     private Button todoBtn, projectBtn;
+    Boolean activeBtn;
 
-    private FloatingActionButton fab_main, fab_sub1, fab_sub2;
+    private ListView todoView, diaryView, lvtodoList;
 
-    Boolean activeBtn, isFloating;
+    ArrayList<TodoData> todoDataList = new ArrayList<TodoData>();
+    TodoAdapter myAdapter;
 
-    private ExpandableListView todoView;
-    private ListView projectView;
+    ArrayList<DiaryData> diaryDataList;
 
-    private TodoServiceInterface service;
+    private FloatingActionButton WriteActionBtn, setTodoBtn, setDiaryBtn;
+    private boolean fabMain_status = false;
+
+    private ServiceInterface service;
+    private TodoServiceInterface todoService;
+
+
+    private dataHelper helper;
+    private dataControl sqlite;
+
+    static int userId;
+    static String userNick, userEmail, userMsg, userProfile, mode;
+
 
     @SuppressLint("ResourceAsColor")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frag_home, null);
+        profile_view = view.findViewById(R.id.profile_view);
 
+        service = RetrofitClient.getClient().create(ServiceInterface.class);
+
+        todoService = RetrofitClient.getClient().create(TodoServiceInterface.class);
 
         Bundle extra = getArguments();
+
+
+        TextView txtUserNick = view.findViewById(R.id.textUserNick);
+        TextView txtUserMsg = view.findViewById(R.id.profile_msg);
+
         if(extra != null){
-            userNick = extra.getString("userNick");
+            mode = extra.getString("mode");
+
+            if(mode.equals("GUEST")){
+                txtUserNick.setText("게스트");
+                txtUserMsg.setText("로그인을 하면 더 많은 기능을 이용할 수 있어요!");
+            }else if(mode.equals("LOGIN_USER")){
+                userEmail = extra.getString("userEmail");
+                checkUserInfo(new UserData(userEmail));
+            }
         }
-        textUserNick = view.findViewById(R.id.textUserNick);
-        textUserNick.setText(userNick);
+
+        profile_view.setClipToOutline(true);
 
         todoBtn = view.findViewById(R.id.todoBtn);
         projectBtn = view.findViewById(R.id.projectBtn);
 
-        todoView = view.findViewById(R.id.lvTodoList);
-        projectView = view.findViewById(R.id.lvprojectItem);
+        todoView = view.findViewById(R.id.lvtodoItem);
+        diaryView = view.findViewById(R.id.lvdiaryItem);
 
         todoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 activeBtn = true;
                 SetBtnFocus(activeBtn);
+
             }
         });
 
@@ -99,40 +157,13 @@ public class Frag_home extends Fragment {
         });
 
         activeBtn = true;
-
-        isFloating = false;
         SetBtnFocus(activeBtn);
 
-        service = RetrofitClient.getClient().create(TodoServiceInterface.class);
+        LinearLayout todoLayout = view.findViewById(R.id.todo_layout);
+        LinearLayout diaryLayout = view.findViewById(R.id.diary_layout);
 
-
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = dateFormatter.format(new Date(System.currentTimeMillis()));
-        service.todoByDate(formattedDate).enqueue(new Callback<List<CategoryTodoResponse>>() {
-            @Override
-            public void onResponse(Call<List<CategoryTodoResponse>> call, Response<List<CategoryTodoResponse>> response) {
-                if (response.isSuccessful()) {
-                    categoryTodoList = response.body();
-                    final TodoAdapter adapter = new TodoAdapter(getContext(), categoryTodoList);
-                    todoView.setAdapter(adapter);
-                    todoView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-                        @Override
-                        public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
-                            Toast.makeText(view.getContext(), adapter.getChild(groupPosition, childPosition).getContent(), Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
-                    });
-                    showTodo(adapter);
-                } else {
-                    Log.d("response", "fail");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<CategoryTodoResponse>> call, Throwable t) {
-
-            }
-        });
+        todoLayout.setVisibility(View.GONE);
+        diaryLayout.setVisibility(View.GONE);
 
         final CompactCalendarView monthView = (CompactCalendarView) view.findViewById(R.id.month_view);
 
@@ -145,40 +176,26 @@ public class Frag_home extends Fragment {
         monthView.setFirstDayOfWeek(Calendar.MONDAY);
 
 
-        fab_main = view.findViewById(R.id.floatingActionButton);
-        fab_sub1 = view.findViewById(R.id.fab_sub1);
-        fab_sub2 = view.findViewById(R.id.fab_sub2);
-
-        fab_main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isFloating){
-                    fab_sub1.setVisibility(View.INVISIBLE);
-                    fab_sub2.setVisibility(View.INVISIBLE);
-                    isFloating = false;
-                }else {
-                    fab_sub1.setVisibility(View.VISIBLE);
-                    fab_sub2.setVisibility(View.VISIBLE);
-                    isFloating = true;
-                }
-
-            }
-        });
-
-
-        fab_sub1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), TodoActivity.class);
-                startActivity(intent);
-            }
-        });
-
 
         monthView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
-                setTodoListByDate(dateClicked);
+                List<Event> events = monthView.getEvents(dateClicked);
+
+                if (activeBtn){
+                    try {
+                        if(mode.equals("GUEST")){
+                            Toast.makeText(getContext(),"로그인을 하면 더 많은 기능을 사용할 수 있어요!", Toast.LENGTH_SHORT).show();
+                        }else if(mode.equals("LOGIN_USER")){
+                            getTodoListsDate(userNick, String.valueOf(dateClicked));
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(getContext(), "해당 날짜 일기 보기: "  + dateClicked, Toast.LENGTH_SHORT).show();
+                }
+
             }
 
             @Override
@@ -201,38 +218,150 @@ public class Frag_home extends Fragment {
             }
         });
 
+
+        WriteActionBtn = (FloatingActionButton) view.findViewById(R.id.fabClickBtn);
+        setTodoBtn = (FloatingActionButton) view.findViewById(R.id.fab_setTodo);
+        setDiaryBtn = (FloatingActionButton) view.findViewById(R.id.fab_setDiary);
+
+
+
+        WriteActionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFab();
+            }
+        });
+
+        setTodoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mode.equals("GUEST")){
+                    Toast.makeText(getContext(),"로그인을 하면 더 많은 기능을 사용할 수 있어요!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), StartActivity.class);
+                    startActivity(intent);
+                }else if(mode.equals("LOGIN_USER")){
+                    Intent intent = new Intent(getActivity(), TodoActivity.class);
+                    intent.putExtra("userNick", userNick);
+                    intent.putExtra("userEmail", userEmail);
+                    intent.putExtra("mode", "LOGIN_USER");
+
+                    startActivity(intent);
+                }
+            }
+        });
+
+
+        setDiaryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mode.equals("GUEST")){
+                    Toast.makeText(getContext(),"로그인을 하면 더 많은 기능을 사용할 수 있어요!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), StartActivity.class);
+                    startActivity(intent);
+                }else if(mode.equals("LOGIN_USER")){
+                    Intent intent = new Intent(getActivity(), DiaryActivity.class);
+                    intent.putExtra("userNick", userNick);
+                    intent.putExtra("userEmail", userEmail);
+                    intent.putExtra("mode", "LOGIN_USER");
+
+                    startActivity(intent);
+                }
+            }
+        });
+
+
+        lvtodoList = (ListView)view.findViewById(R.id.lvtodoItem);
+        myAdapter = new TodoAdapter(view.getContext(),todoDataList);
+
+//        ViewGroup.LayoutParams params = lvtodoList.getLayoutParams();
+//        params.height = 240 * myAdapter.getCount();
+//        lvtodoList.setLayoutParams(params);
+//        lvtodoList.setAdapter(myAdapter);
+
+
+
+
         return  view;
     }
 
-    private void setTodoListByDate(Date date) {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = dateFormatter.format(date);
-        service.todoByDate(formattedDate).enqueue(new Callback<List<CategoryTodoResponse>>() {
-            @Override
-            public void onResponse(Call<List<CategoryTodoResponse>> call, Response<List<CategoryTodoResponse>> response) {
-                if (response.isSuccessful()) {
-                    categoryTodoList = response.body();
-                    final TodoAdapter adapter = new TodoAdapter(getContext(),categoryTodoList);
-                    todoView.setAdapter(adapter);
-                    showTodo(adapter);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<CategoryTodoResponse>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void showTodo(TodoAdapter adapter) {
-        for (int i = 0; i < adapter.getGroupCount(); i++) {
-            todoView.expandGroup(i);
+    public void ClearTodo(){
+        if(todoDataList != null){
+            todoDataList.clear();
+            myAdapter.notifyDataSetChanged();
         }
     }
 
+    public void InitializeTodoData(List<TodoDayData> dataItems)
+    {
+        try {
+            ClearTodo();
+            for (int i=0; i<dataItems.size(); i++) {
+                TodoDayData dataItem = dataItems.get(i);
+
+                try {
+                    String todo_text = dataItem.getTodoTitle();
+                    Boolean todo_check = dataItem.getIsCheck();
+                    String chkDate = formatDateTime(dataItem.getTodoDate());
+                    String chkTime = dataItem.getTodoTime();
+
+                    myAdapter.addItem(new TodoData(todo_check, todo_text, chkDate, chkTime));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            ViewGroup.LayoutParams params = lvtodoList.getLayoutParams();
+            params.height = 240 * myAdapter.getCount();
+            lvtodoList.setLayoutParams(params);
+            lvtodoList.setAdapter(myAdapter);
+        }catch (Error e){
+            e.printStackTrace();
+        }
+    }
+
+    public void InitializeDiaryData()
+    {
+        diaryDataList.add(new DiaryData("오늘의 일기", "인간의 같이 눈에 풍부하게 관현악이며, 주는 착목한는 그들은 우리의 따뜻한 있다.","", "2022-12-08", 125, 150));
+    }
+
+    public void toggleFab() {
+        LinearLayout todoLayout = view.findViewById(R.id.todo_layout);
+        LinearLayout diaryLayout = view.findViewById(R.id.diary_layout);
+
+        if(fabMain_status) {
+            // 플로팅 액션 버튼 닫기
+            // 애니메이션 추가
+            ObjectAnimator fc_animation = ObjectAnimator.ofFloat(todoLayout, "translationY", 0f);
+            fc_animation.start();
+            ObjectAnimator fe_animation = ObjectAnimator.ofFloat(diaryLayout, "translationY", 0f);
+            fe_animation.start();
+
+            todoLayout.setVisibility(View.GONE);
+            diaryLayout.setVisibility(View.GONE);
+            // 메인 플로팅 이미지 변경
+            WriteActionBtn.setImageResource(R.drawable.plus_icon);
+
+        }else {
+            todoLayout.setVisibility(View.VISIBLE);
+            diaryLayout.setVisibility(View.VISIBLE);
+            // 플로팅 액션 버튼 열기
+            ObjectAnimator fc_animation = ObjectAnimator.ofFloat(todoLayout, "translationY", -40f);
+            fc_animation.start();
+            ObjectAnimator fe_animation = ObjectAnimator.ofFloat(diaryLayout, "translationY", -20f);
+            fe_animation.start();
+            // 메인 플로팅 이미지 변경
+            WriteActionBtn.setImageResource(R.drawable.close_icon);
+        }
+        // 플로팅 버튼 상태 변경
+        fabMain_status = !fabMain_status;
+    }
+
+
+
     public void SetBtnFocus(boolean check)
     {
+
         if(check){
             todoBtn.setBackground(getResources().getDrawable(R.drawable.btn_solid_02));
             todoBtn.setTextColor(getResources().getColor(R.color.white));
@@ -241,7 +370,7 @@ public class Frag_home extends Fragment {
             projectBtn.setTextColor(getResources().getColor(R.color.main));
 
             todoView.setVisibility(View.VISIBLE);
-            projectView.setVisibility(View.GONE);
+            diaryView.setVisibility(View.GONE);
         }else{
             todoBtn.setBackground(getResources().getDrawable(R.drawable.btn_line_02));
             todoBtn.setTextColor(getResources().getColor(R.color.main));
@@ -249,11 +378,240 @@ public class Frag_home extends Fragment {
             projectBtn.setBackground(getResources().getDrawable(R.drawable.btn_solid_03));
             projectBtn.setTextColor(getResources().getColor(R.color.white));
 
-            projectView.setVisibility(View.VISIBLE);
-            todoView.setVisibility(View.GONE);
+            //diaryView.setVisibility(View.VISIBLE);
+            //todoView.setVisibility(View.GONE);
         }
 
     }
+
+    public void saveUserInfo(UserData data){
+
+        userEmail = data.getEmail();
+        userId = data.getId();
+        userNick = data.getNickname();
+        userMsg = data.getMsg();
+        userProfile = data.getProfile();
+
+        TextView txtUserNick = view.findViewById(R.id.textUserNick);
+        TextView txtUserMsg = view.findViewById(R.id.profile_msg);
+
+        txtUserNick.setText(userNick);
+
+        if(userMsg.equals("")){
+            txtUserMsg.setText("프로필에 목표를 설정해보세요");
+        }else {
+            txtUserMsg.setText(data.getMsg());
+        }
+
+        if(userProfile.equals("")){
+            profile_view.setImageResource(R.drawable.noimg);
+        }else{
+            String imageUrl = "https://aws-tiqets-cdn.imgix.net/images/content/f02865ee82a44cf0a87e9f72f7258fa1.jpg?auto=format&fit=crop&ixlib=python-3.2.1&q=70&s=e70b1d80f5538f189ea48bea0c48e079";
+            Glide.with(this).load(imageUrl).into(profile_view);
+        }
+
+        getTodoListsToday(userNick);
+        getTodoListsMonthInit(userNick);
+
+    }
+
+    public void getCalendarMonthInit(String selDate, int Count){
+        final CompactCalendarView monthView = (CompactCalendarView) view.findViewById(R.id.month_view);
+
+        java.util.Date Now = new Date();
+        long NowTime = Now.getTime();
+
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date date = inputFormat.parse(selDate);
+            String formattedDate = outputFormat.format(date);
+
+            long time = (long) date.getTime() + (86400L * 9L);
+
+
+            Event ev2 = new Event(Color.GREEN, time, "todo");
+
+            monthView.addEvent(ev2);
+
+        } catch(Exception e) {
+           e.printStackTrace();
+        }
+
+
+        List<Event> events = monthView.getEvents(new Date(NowTime));
+    }
+
+    public void getTodoListsMonthInit(String nickname){
+        java.util.Date date = new Date();
+        long time = date.getTime();
+
+        long timenow = (long) Math.floor(time / 1000L);
+
+        todoService.getTodoMonth(nickname,String.valueOf(timenow)).enqueue(new Callback<TodoMonthResponse>() {
+            @Override
+            public void onResponse(Call<TodoMonthResponse> call, Response<TodoMonthResponse> response) {
+                if(response.isSuccessful()) {
+                    TodoMonthResponse res = response.body();
+
+                    if(res.getCode() == 200){
+                        List<TodoMonthData> dataList = new ArrayList<> ();
+
+                        List<TodoMonthData> ja = res.getData();
+                        for (int i=0; i<ja.size(); i++) {
+                            TodoMonthData dataItem;
+                            dataItem = ja.get(i);
+
+                            getCalendarMonthInit(dataItem.getTodoDate(), dataItem.getCount());
+                        }
+
+                    }else {
+
+                    }
+
+                }else{
+                    try {
+
+                    }catch (Error e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TodoMonthResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
+    }
+
+    public void getTodoListsMonth(String nickname, String selDate){
+
+    }
+
+
+    public void getTodoListsDate(String nickname, String selDate) throws ParseException {
+
+        Date date = new Date(selDate);
+        long time = (long) date.getTime();
+        long timenow = (long) Math.floor(time / 1000L);
+
+        System.out.println(selDate);
+        System.out.println(timenow);
+
+        todoService.getTodoDay(nickname,String.valueOf(timenow)).enqueue(new Callback<TodoDayResponse>() {
+            @Override
+            public void onResponse(Call<TodoDayResponse> call, Response<TodoDayResponse> response) {
+                if(response.isSuccessful()) {
+                    TodoDayResponse res = response.body();
+
+                    if(res.getCode() == 200){
+                        List<TodoDayData> ja = res.getData();
+
+                        if(ja != null){
+                            InitializeTodoData(ja);
+                        }else {
+                            ClearTodo();
+                        }
+                    }
+
+                }else{
+                    try {
+
+                    }catch (Error e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TodoDayResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private String formatDateTime(String selDate) throws ParseException {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = inputFormat.parse(selDate);
+        String formattedDate = outputFormat.format(date);
+
+        return formattedDate;
+    }
+
+
+    private void getTodoListsToday(String nickname){
+        todoService.getTodo(nickname).enqueue(new Callback<TodoDayResponse>() {
+            @Override
+            public void onResponse(Call<TodoDayResponse> call, Response<TodoDayResponse> response) {
+                if(response.isSuccessful()) {
+                    TodoDayResponse res = response.body();
+
+                    if(res.getCode() == 200){
+                        List<TodoDayData> ja = res.getData();
+
+                        if(ja != null){
+                            InitializeTodoData(ja);
+                        }
+
+                    }else {
+
+                    }
+
+                }else{
+                    try {
+
+                    }catch (Error e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TodoDayResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void checkUserInfo(UserData data){
+
+        service.userCheck(data).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if(response.isSuccessful()) {
+                    UserResponse user_response = response.body();
+
+                    if(user_response != null){
+                        userId = user_response.getResult().getId();
+                        userEmail = user_response.getResult().getEmail();
+                        userNick = user_response.getResult().getNickname();
+                        userMsg = user_response.getResult().getMsg();
+                        userProfile = user_response.getResult().getProfile();
+
+                        saveUserInfo(new UserData(userId, userEmail, userNick, userMsg, userProfile));
+                    }
+
+                }else{
+                    try {
+
+                    }catch (Error e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
 
 
 }

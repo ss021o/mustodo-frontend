@@ -16,4 +16,5 @@ public class AuthResponse {
     public String getMessage() {
         return message;
     }
+
 }

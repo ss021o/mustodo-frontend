@@ -7,17 +7,18 @@ public class SignUpData {
     @SerializedName("email")
     private String userEmail;
 
-    @SerializedName("name")
+    //@SerializedName("name")
+    @SerializedName("nickname")
     private String userName;
 
     @SerializedName("password")
     private String userPassword;
 
-    @SerializedName("passwordConfirm")
-    private String userPasswordCheck;
-
-    @SerializedName("termsAndConditions")
-    private Boolean userTermCheck;
+//    @SerializedName("passwordConfirm")
+//    private String userPasswordCheck;
+//
+//    @SerializedName("termsAndConditions")
+//    private Boolean userTermCheck;
 
     public String getEmail(){
         return userEmail;
@@ -27,12 +28,19 @@ public class SignUpData {
         return userName;
     }
 
-    public SignUpData(String userEmail, String userName, String userPassword, String userPasswordCheck, Boolean userTermCheck) {
+//    public SignUpData(String userEmail, String userName, String userPassword, String userPasswordCheck, Boolean userTermCheck) {
+//        this.userName = userName;
+//        this.userEmail = userEmail;
+//        this.userPassword = userPassword;
+//        this.userPasswordCheck = userPasswordCheck;
+//        this.userTermCheck = userTermCheck;
+//    }
+
+    public SignUpData(String userEmail, String userName, String userPassword ) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.userPasswordCheck = userPasswordCheck;
-        this.userTermCheck = userTermCheck;
     }
+
 
 }

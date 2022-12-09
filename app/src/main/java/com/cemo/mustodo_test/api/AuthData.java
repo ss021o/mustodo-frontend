@@ -6,7 +6,7 @@ public class AuthData {
     @SerializedName("email")
     private String userEmail;
 
-    @SerializedName("authKey")
+    @SerializedName("code")
     private String userAuth;
 
     public AuthData(String userEmail, String userAuth) {

@@ -1,76 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     android:background="@color/white"
-  >
+    android:padding="10dp"
+    >
+
+    <LinearLayout
+        android:id="@+id/userLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:id="@+id/profile_view"
+            android:scaleType="centerCrop"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/round_card"
+            android:src="@drawable/plus"/>
+
         <LinearLayout
-            android:id="@+id/userLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@color/gray"/>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/textUserNick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp">
+                android:text="User Id"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textUserNick"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:text="User Id"/>
+            <TextView
+                android:id="@+id/profile_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="프로필에 목표를 설정해보세요" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="email"/>
-
-
-            </LinearLayout>
 
         </LinearLayout>
 
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/userLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
         <LinearLayout
-            android:layout_below="@+id/userLayout"
             android:id="@+id/first_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/userLayout"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="10dp"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="3">
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:id="@+id/dateText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2022년 10월"
+                        android:textColor="@color/black"
                         android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -79,171 +95,176 @@
                     android:id="@+id/prev_btn"
                     android:layout_width="12dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/left_arrow"
-                    android:scaleType="fitCenter"
-                    android:background="@color/transparent"
                     android:layout_marginRight="10dp"
-                    android:textColor="@color/black"/>
+                    android:background="@color/transparent"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/left_arrow"
+                    android:textColor="@color/black" />
 
                 <ImageButton
                     android:id="@+id/next_btn"
                     android:layout_width="12dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/right_arrow"
-                    android:scaleType="fitCenter"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@color/transparent"
-                    android:textColor="@color/black"/>
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/right_arrow"
+                    android:textColor="@color/black" />
 
-                <ToggleButton
-                    android:background="#cccccc"
-                    android:layout_width="60dp"
-                    android:layout_height="30dp"
-                    android:checked="true"
-                    android:textOff="주"
-                    android:textOn="월"/>
 
 
             </LinearLayout>
 
-
-            <com.github.sundeepk.compactcalendarview.CompactCalendarView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/month_view"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
-                android:layout_height="250dp"
-                app:compactCalendarTargetHeight="250dp"
-                app:compactCalendarTextSize="12sp"
-                app:compactCalendarBackgroundColor="#fff"
-                app:compactCalendarTextColor="#000"
-                app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
-                app:compactCalendarCurrentDayBackgroundColor="#FFE180"
-                app:compactCalendarMultiEventIndicatorColor="#fff"
-                />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.github.sundeepk.compactcalendarview.CompactCalendarView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/month_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    app:compactCalendarBackgroundColor="#fff"
+                    app:compactCalendarCurrentDayBackgroundColor="#FFE180"
+                    app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
+                    app:compactCalendarMultiEventIndicatorColor="#fff"
+                    app:compactCalendarTargetHeight="250dp"
+                    app:compactCalendarTextColor="#000"
+                    app:compactCalendarTextSize="12sp" />
+
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center">
+
                 <Button
                     android:id="@+id/todoBtn"
-                    android:text="TODO"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
                     android:background="@drawable/btn_solid_02"
-                    android:textColor="@color/white"/>
+                    android:text="TODO"
+                    android:textColor="@color/white" />
+
                 <Button
                     android:id="@+id/projectBtn"
-                    android:text="PROJECT"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
                     android:background="@drawable/btn_line_03"
-                    android:textColor="@color/main"/>
+                    android:text="DIARY"
+                    android:textColor="@color/main" />
             </LinearLayout>
 
-            <ExpandableListView
-                android:id="@+id/lvTodoList"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:divider="@null"
-                android:layout_marginTop="10dp">
-            </ExpandableListView>
+                android:orientation="vertical">
 
-            <ListView
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:id="@+id/lvprojectItem"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@null"
-                android:dividerHeight="15dp"/>
+                <ListView
+                    android:id="@+id/lvtodoItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="1000dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:divider="@null"
+                    android:dividerHeight="15dp" />
 
-
-
-
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical">-->
-<!--                            -->
-<!--                            <com.google.android.material.tabs.TabLayout-->
-<!--                                android:id="@+id/tabs"-->
-<!--                                android:layout_width="250dp"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:layout_height="wrap_content">-->
-
-<!--                                <com.google.android.material.tabs.TabItem-->
-<!--                                    android:layout_width="wrap_content"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:text="TODO"/>-->
-<!--                                <com.google.android.material.tabs.TabItem-->
-<!--                                    android:layout_width="wrap_content"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:text="PROJECT"/>-->
-<!--                            </com.google.android.material.tabs.TabLayout>-->
-
-<!--                            <FrameLayout-->
-<!--                                android:id="@+id/todoFrame"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="600dp"-->
-<!--                                android:layout_weight="1"/>-->
-
-<!--            </LinearLayout>-->
-
-
-
+                <ListView
+                    android:id="@+id/lvdiaryItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:divider="@null"
+                    android:dividerHeight="15dp" />
+            </LinearLayout>
         </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_sub1"
+    </ScrollView>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/todo_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/fab_sub2"
+        android:layout_above="@+id/diary_layout"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="15dp"
-        android:layout_marginRight="10dp"
-        android:backgroundTint="#ffffff"
-        android:src="@drawable/logo"
-        android:visibility="invisible"
-        app:borderWidth="0dp"
-        app:fabSize="normal" />
+        android:gravity="center">
+        <Button
+            android:layout_width="75dp"
+            android:layout_height="35dp"
+            android:background="@drawable/btn_solid_01"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:text="할 일"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_setTodo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:backgroundTint="@color/main"
+            android:src="@drawable/calendar_icon"
+            app:borderWidth="0dp"
+            app:fabCustomSize="45dp"
+            app:fabSize="normal" />
+    </LinearLayout>
 
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_sub2"
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/diary_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/floatingActionButton"
+        android:layout_above="@+id/fabClickBtn"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="15dp"
-        android:layout_marginRight="10dp"
-        android:backgroundTint="#ffffff"
-        android:src="@drawable/logo"
-        android:visibility="invisible"
-        app:borderWidth="0dp"
-        app:fabSize="normal" />
+        android:gravity="center">
+        <Button
+            android:layout_width="75dp"
+            android:layout_height="35dp"
+            android:background="@drawable/btn_solid_01"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:text="일기"/>
 
-
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_setDiary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:backgroundTint="@color/main"
+            android:src="@drawable/diary_icon"
+            app:borderWidth="0dp"
+            app:fabCustomSize="45dp"
+            app:fabSize="normal" />
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/fabClickBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/plus"
-        android:backgroundTint="#0062FF"
+        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginRight="12dp"
         android:layout_marginBottom="15dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"/>
+        android:backgroundTint="#0062FF"
+        android:clickable="true"
+        android:padding="0dp"
+        android:scaleType="matrix"
+        app:maxImageSize="26dp"
+        app:srcCompat="@drawable/plus_icon" />
 
 
-
-
-</RelativeLayout>
+    </RelativeLayout>

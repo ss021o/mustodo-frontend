@@ -1,35 +1,30 @@
 package com.cemo.mustodo_test;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.cemo.mustodo_test.api.RetrofitClient;
+import com.cemo.mustodo_test.api.ServiceInterface;
+import com.cemo.mustodo_test.api.UserData;
+import com.cemo.mustodo_test.api.UserResponse;
+import com.cemo.mustodo_test.data.dataControl;
+import com.cemo.mustodo_test.data.dataHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,17 +40,22 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout header_menu;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
 
         Intent intent = getIntent();
-        String userNick =intent.getExtras().getString("email");
+
+        String email = intent.getExtras().getString("email");
+        String mode = intent.getExtras().getString("mode");
+        //checkUserInfo(new UserData(email));
+
+        //Toast.makeText(getApplicationContext(),data.getEmail(), Toast.LENGTH_SHORT ).show();
 
         header_menu = findViewById(R.id.header_menu);
 
@@ -94,10 +94,21 @@ public class MainActivity extends AppCompatActivity {
         setFrag(0);
 
         Bundle bundle = new Bundle();
-        bundle.putString("userNick", userNick);
+
+        //bundle.putInt("userId", result.getId());
+        bundle.putString("mode", mode);
+        bundle.putString("userEmail", email);
+        //bundle.putString("userNick", "asasasas");
+        //bundle.putString("userMsg", userMsg);
+        //bundle.putString("userProfile", userProfile);
+
         frag_home.setArguments(bundle);
 
+
+
     }
+
+
 
 
 

@@ -47,8 +47,12 @@ public class StartActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(StartActivity.this, MainActivity.class);
 
+                intent.putExtra("mode", "GUEST");
                 intent.putExtra("email", "guestUser@user.com");
+
                 startActivity(intent);
+
+                finish();
 
             }
         });

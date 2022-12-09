@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/todoItemLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp"
+    android:layout_margin="5dp"
     android:background="@drawable/todo_item1"
-    android:elevation="2dp"
-    android:layout_margin="5dp">
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp">
+
     <CheckBox
         android:id="@+id/todo_check"
-        android:button="@android:color/transparent"
-        android:background="@drawable/checkbox_item1"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center"
-        android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
-        />
+        android:layout_marginRight="10dp"
+        android:background="@drawable/checkbox_item1"
+        android:button="@android:color/transparent" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,22 +26,23 @@
 
         <TextView
             android:id="@+id/todo_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="TodoItem"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/todo_date"
-            android:text="Tododate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Tododate" />
     </LinearLayout>
 
     <LinearLayout
-        android:background="#e14f50"
-        android:layout_gravity="center"
         android:layout_width="8dp"
-        android:layout_height="30dp"/>
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:background="#e14f50" />
 
 </LinearLayout>
