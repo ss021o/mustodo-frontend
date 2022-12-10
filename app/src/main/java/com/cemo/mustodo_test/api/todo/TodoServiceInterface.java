@@ -7,6 +7,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface TodoServiceInterface {
-    @GET("todo/{date}")
+    @GET("todo/date/{date}")
     Call<List<CategoryTodoResponse>> todoByDate(@Path(value = "date") String date);
 }
