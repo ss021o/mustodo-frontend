@@ -212,6 +212,10 @@ public class Frag_feed extends Fragment {
                         userProfile = "noImg";
                     }
 
+                    if(img.equals("")){
+                        img = "noImg";
+                    }
+
                     diaryOpenDataList.add(new DiaryDayData(openId, openUId, openNick, userProfile, userMsg, title, img, contents, created));
                     openDiaryAdapter.notifyDataSetChanged();
                 }
