@@ -273,14 +273,6 @@ public class Frag_home extends Fragment {
         lvtodoList = (ListView)view.findViewById(R.id.lvtodoItem);
         myAdapter = new TodoAdapter(view.getContext(),todoDataList);
 
-//        ViewGroup.LayoutParams params = lvtodoList.getLayoutParams();
-//        params.height = 240 * myAdapter.getCount();
-//        lvtodoList.setLayoutParams(params);
-//        lvtodoList.setAdapter(myAdapter);
-
-
-
-
         return  view;
     }
 
@@ -299,8 +291,8 @@ public class Frag_home extends Fragment {
                 TodoDayData dataItem = dataItems.get(i);
 
                 try {
-                    String todo_text = dataItem.getTodoTitle();
-                    Boolean todo_check = dataItem.getIsCheck();
+                    String todo_text = dataItem.getTitle();
+                    Boolean todo_check = dataItem.getCheck();
                     String chkDate = formatDateTime(dataItem.getTodoDate());
                     String chkTime = dataItem.getTodoTime();
 

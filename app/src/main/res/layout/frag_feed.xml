@@ -34,6 +34,7 @@
         android:id="@+id/feed_todo_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:divider="@null"
         android:layout_weight="1"/>
 
     <ListView
@@ -41,6 +42,7 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:divider="@null"
         android:layout_weight="1"/>
 
 

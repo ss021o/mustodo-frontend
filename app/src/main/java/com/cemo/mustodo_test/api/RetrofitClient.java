@@ -31,7 +31,6 @@ public class RetrofitClient {
             cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
 
             OkHttpClient client = new OkHttpClient.Builder()
-//                    .addInterceptor(interceptor)
                     .cookieJar(new JavaNetCookieJar(cookieManager)).build();
 
 
@@ -40,9 +39,10 @@ public class RetrofitClient {
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL) // 요청을 보낼 base url을 설정한다.
+                    //.addConverterFactory(JacksonConverterFactory.create())
                     .addConverterFactory(new NullOnEmptyConverterFactory())
                     .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create()) // JSON 파싱을 위한 GsonConverterFactory를 추가한다.
+                    .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();
         }

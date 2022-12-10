@@ -1,6 +1,5 @@
 package com.cemo.mustodo_test;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -11,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,16 +27,20 @@ import android.widget.Toast;
 
 import com.cemo.mustodo_test.api.RetrofitClient;
 import com.cemo.mustodo_test.api.ServiceInterface;
-import com.cemo.mustodo_test.api.todo.TodoData;
+import com.cemo.mustodo_test.api.todo.TodoDayData;
 import com.cemo.mustodo_test.api.todo.TodoGroupData;
 import com.cemo.mustodo_test.api.todo.TodoGroupResponse;
+import com.cemo.mustodo_test.api.todo.TodoResponse;
 import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
 import com.cemo.mustodo_test.todo.ProjectAdapter;
-import com.cemo.mustodo_test.todo.RepeatAdapter;
+import com.cemo.mustodo_test.todo.TodoData;
+import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -65,7 +67,7 @@ public class TodoActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter, adapter2;
 
     static List<TodoGroupData> projects;
-    static int Group_id, sel_group_id;
+    static int group_id, sel_group_id = 0;
 
 
     ProjectAdapter myAdapter;
@@ -394,28 +396,75 @@ public class TodoActivity extends AppCompatActivity {
 
                 String title = todo_title.getText().toString();
 
+                java.util.Date Now = new Date();
+                String formatToday, formatDay, beforeDay;
+
+
+                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                formatToday = outputFormat.format(Now);
+
                 if(title.length() == 0){
                     Toast.makeText(getApplicationContext(), "할 일을 작성해주세요!", Toast.LENGTH_SHORT).show();
                 }else if(sel_project_btn.getText().equals("프로젝트 선택")){
                     Toast.makeText(getApplicationContext(), "프로젝트를 선택해주세요!", Toast.LENGTH_SHORT).show();
                 }else{
-                    int group_id = sel_group_id;
-                    String setDate = sel_date_btn.getText().toString();
-                    String setTime = sel_time_btn.getText().toString();
+                    if(!sel_date_btn.getText().toString().equals("오늘")){
+                        beforeDay = sel_date_btn.getText().toString();
+                        formatDay = beforeDay.replace("년 ", "-");
+                        formatDay = formatDay.replace("월 ", "-");
+                        formatDay = formatDay.replace("일", "");
+                    }else{
+                        formatDay = "";
+                    }
+                    String setDate = sel_date_btn.getText().toString().equals("오늘") ? formatToday : formatDay;
+                    String setTime = sel_time_btn.getText().toString().replace(" ", "");
                     boolean isOpen = sel_open_btn.getText().toString().equals("전체 공개") ? true : false;
-                    int  isLevel = Integer.valueOf(sel_repeat_btn.getText().toString());
+                    int isLevel = 5;
 
-                    TodoData data = new TodoData(group_id, title, setDate, setTime, isOpen, isLevel);
+                    TodoDayData data = new TodoDayData(group_id, title, setDate, setTime, isOpen, isLevel);
 
+                    setTodoItem(data);
                 }
-                Toast.makeText(getApplicationContext(), "할일 내용" + todo_title.getText().toString(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "할일 그룹" + sel_project_btn.getText().toString(), Toast.LENGTH_SHORT).show();
 
             }
         });
 
 
 
+    }
+
+    public void setTodoItem(TodoDayData data){
+        todoService.setTodo(userNick, data).enqueue(new Callback<TodoResponse>() {
+            @Override
+            public void onResponse(Call<TodoResponse> call, Response<TodoResponse> response) {
+                if(response.isSuccessful()) {
+                    TodoResponse res = response.body();
+                    if(res.getCode() == 200){
+                        res.getCode();
+                        Toast.makeText(getApplicationContext(), "생성 성공", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(TodoActivity.this, MainActivity.class);
+
+                        intent.putExtra("email", userEmail);
+                        intent.putExtra("mode", mode);
+                        startActivity(intent);
+
+                        finish();
+                    }
+                }else{
+                    try {
+
+                    }catch (Error e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TodoResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     public void setTodoGroup(String userNick, String title, String color){
@@ -476,15 +525,12 @@ public class TodoActivity extends AppCompatActivity {
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-
             String Group_title = intent.getStringExtra("title");
-            int group_id = intent.getIntExtra("group_id", sel_group_id);
+            group_id = intent.getIntExtra("group_id", sel_group_id);
             String color = intent.getStringExtra("color");
             sel_project_btn.setText(Group_title);
 
             bottomSheetDialog.dismiss();
-
         }
     };
 

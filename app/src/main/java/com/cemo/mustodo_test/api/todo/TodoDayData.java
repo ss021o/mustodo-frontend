@@ -10,6 +10,15 @@ public class TodoDayData {
     @SerializedName("user_id")
     private int user_id;
 
+    @SerializedName("nickname")
+    private String nickname;
+
+    @SerializedName("profile")
+    private String profile;
+
+    @SerializedName("mymsg")
+    private String mymsg;
+
     @SerializedName("group_id")
     private int group_id;
 
@@ -37,16 +46,34 @@ public class TodoDayData {
     @SerializedName("color")
     private String color;
 
-    public String getTodoTitle(){
-        return title;
+    public int getId() { return id; }
+
+    public String getTitle() { return title; }
+
+    public String getColor() { return color; }
+
+    public Boolean getCheck() { return isCheck; }
+
+    public Boolean getOpen() { return isOpen; }
+
+    public int getGroup_id() { return group_id; }
+
+    public int getIsLevel() { return isLevel; }
+
+    public int getUser_id() { return user_id; }
+
+    public String getNickname() { return nickname; }
+
+    public String getCate() {
+        return cate;
     }
 
-    public Boolean getIsCheck(){
-        return isCheck;
+    public String getMymsg() {
+        return mymsg;
     }
 
-    public Boolean getIsOpen(){
-        return isOpen;
+    public String getProfile() {
+        return profile;
     }
 
     public String getTodoDate(){
@@ -57,8 +84,30 @@ public class TodoDayData {
         return todoTime;
     }
 
-    public String getTodoColor(){
-        return color;
+
+    public TodoDayData(int group_id, String title, String todoDate, String todoTime, boolean isOpen, int isLevel){
+        this.group_id = group_id;
+        this.title = title;
+        this.todoDate = todoDate;
+        this.todoTime = todoTime;
+        this.isOpen = isOpen;
+        this.isLevel = isLevel;
+    }
+
+
+    public TodoDayData(int id, int user_id, String nickname, String profile, String mymsg, int group_id, String title, String todoDate, String todoTime, Boolean isCheck, Boolean isOpen, int isLevel) {
+        this.id = id;
+        this.user_id = user_id;
+        this.nickname = nickname;
+        this.profile = profile;
+        this.mymsg = mymsg;
+        this.group_id = group_id;
+        this.title = title;
+        this.todoDate = todoDate;
+        this.todoTime = todoTime;
+        this.isCheck = isCheck;
+        this.isOpen = isOpen;
+        this.isLevel =isLevel;
     }
 
 

@@ -56,7 +56,7 @@ public class TodoAdapter extends BaseAdapter {
         TextView todo_date = (TextView) view.findViewById(R.id.todo_date);
 
         todo_check.setChecked(items.get(position).getTodoCheck());
-        todo_text.setText(items.get(position).getTodoText());
+        todo_text.setText(items.get(position).getTitle());
         todo_date.setText(items.get(position).getTodoDate());
 
         LinearLayout clickLayout= (LinearLayout)view.findViewById(R.id.todoItemLayout);
@@ -64,7 +64,7 @@ public class TodoAdapter extends BaseAdapter {
         clickLayout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
                 //해당 리스트 클릭시 이벤트
-                Toast.makeText(v.getContext(), items.get(position).getTodoText()  + " : " + items.get(position).getTodoCheck() , Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), items.get(position).getTitle()  + " : " + items.get(position).getTodoCheck() , Toast.LENGTH_SHORT).show();
 
                 //sample.get(position).getTodoCheck() = true;
                 if(items.get(position).getTodoCheck()){

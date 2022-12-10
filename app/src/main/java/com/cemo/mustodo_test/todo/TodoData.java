@@ -1,25 +1,78 @@
 package com.cemo.mustodo_test.todo;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.sql.Date;
 import java.sql.Time;
 
 public class TodoData {
-    private String todo_text;
+    @SerializedName("nickname")
+    @Expose
+    private String nickname;
+
+    @SerializedName("profile")
+    @Expose
+    private String profile;
+
+    @SerializedName("mymsg")
+    @Expose
+    private String mymsg;
+
+    @SerializedName("title")
+    @Expose
+    private String title;
+
+    @SerializedName("todoDate")
+    @Expose
     private String todo_date;
+
+    @SerializedName("isCheck")
+    @Expose
     private boolean todo_check;
 
+    @SerializedName("todoTime")
+    @Expose
     private String todo_time;
 
-    public TodoData(boolean todo_check, String todo_text, String todo_date, String todo_time){
-        this.todo_date = todo_date;
-        this.todo_time = todo_time;
-        this.todo_text = todo_text;
-        this.todo_check = todo_check;
+
+    private Boolean isOpen;
+    private Boolean isCheck;
+    private int isLevel;
+
+    @SerializedName("id")
+    @Expose
+    private int id;
+    private int group_id;
+
+
+
+    public int getId() {
+        return id;
     }
 
-    public String getTodoText()
+    public String getTodoTime(){
+            return this.todo_time;
+    }
+
+    public int getGroupId(){
+        return this.group_id;
+    }
+    public String getUserNick() {
+        return this.nickname;
+    }
+
+    public String getUserMsg() {
+        return this.mymsg;
+    }
+
+    public String getUserProfile() {
+        return this.profile;
+    }
+
+    public String getTitle()
     {
-        return this.todo_text;
+        return this.title;
     }
 
     public String getTodoDate()
@@ -40,13 +93,63 @@ public class TodoData {
         this.todo_time = time;
     }
 
-    public void setTodoTitle(String title){
-        this.todo_text = title;
+    public void setTitle(String title){
+        this.title = title;
+    }
+
+    public void setUserMsg(String userMsg) {
+        this.mymsg = userMsg;
+    }
+
+    public void setUserNick(String userNick) {
+        this.nickname = userNick;
+    }
+
+    public void setUserProfile(String userProfile) {
+        this.profile = userProfile;
     }
 
     public boolean setTodoCheck(boolean checked)
     {
         todo_check = checked;
         return this.todo_check;
+    }
+
+
+//     "id": 5,
+//     "user_id": 1,
+//     "group_id": 1,
+//     "title": "PT(상체)",
+//     "todoDate": "2022-12-05T15:00:00.000Z",
+//     "todoTime": "21:00:00",
+//     "created": 1670428901,
+//     "updated": 1670428901,
+//     "isCheck": "0",
+//     "isOpen": "1",
+//     "isLevel": "5",
+//     "nickname": "testUser",
+//     "profile": "",
+//     "mymsg": ""
+
+
+    public TodoData(int id, String nickname, String profile, String mymsg, int group_id, String title, String todoDate, String todoTime, Boolean todo_check, int isLevel)
+    {
+        this.id = id;
+        this.nickname = nickname;
+        this.profile =profile;
+        this.mymsg = mymsg;
+        this.group_id = group_id;
+        this.title = title;
+        this.todo_date =todoDate;
+        this.todo_time = todoTime;
+        this.todo_check = todo_check;
+        this.isLevel = isLevel;
+    }
+
+    public TodoData(boolean todo_check, String title, String todo_date, String todo_time){
+        this.todo_date = todo_date;
+        this.todo_time = todo_time;
+        this.title = title;
+        this.todo_check = todo_check;
     }
 }

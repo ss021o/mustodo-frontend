@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.cemo.mustodo_test.api.LoginData;
 import com.cemo.mustodo_test.api.LoginResponse;
 import com.cemo.mustodo_test.api.RetrofitClient;

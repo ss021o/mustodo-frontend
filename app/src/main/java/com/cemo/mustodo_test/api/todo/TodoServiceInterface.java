@@ -49,4 +49,8 @@ public interface TodoServiceInterface {
 
     @GET("todo/{date}")
     Call<List<CategoryTodoResponse>> todoByDate(@Path(value = "date") String date);
+
+    @GET("search/todo")
+    Call<OpenResponse> getOpenTodoList();
+
 }
