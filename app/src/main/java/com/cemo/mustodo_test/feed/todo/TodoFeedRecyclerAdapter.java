@@ -71,8 +71,13 @@ public class TodoFeedRecyclerAdapter extends RecyclerView.Adapter<TodoFeedRecycl
             View view = LayoutInflater.from(context).inflate(R.layout.item_lvfeedtodo, null, false);
 
             CircleImageView check = view.findViewById(R.id.check);
-            int color = Color.parseColor(value.getGroupColor());
-            check.setCircleBackgroundColor(color);
+            String color = value.getGroupColor();
+            if (color.startsWith("#")) {
+                int parseColor = Color.parseColor(color);
+                check.setCircleBackgroundColor(parseColor);
+            } else {
+                check.setCircleBackgroundColor(Integer.parseInt(color));
+            }
 
             TextView content = view.findViewById(R.id.content);
             content.setText(value.getTitle());

@@ -140,7 +140,13 @@ public class TodoRecyclerAdapter extends RecyclerView.Adapter<TodoRecyclerAdapte
         Button groupName = holder.todoGroup.findViewById(R.id.groupName);
         groupName.setText(todoListMap.getKey().getGroupName());
         LinearLayout groupColor = holder.todoGroup.findViewById(R.id.groupColor);
-        groupColor.setBackgroundColor(Color.parseColor(todoListMap.getKey().getGroupColor()));
+        String color = todoListMap.getKey().getGroupColor();
+        if (color.startsWith("#")) {
+            int parseColor = Color.parseColor(color);
+            groupColor.setBackgroundColor(parseColor);
+        } else {
+            groupColor.setBackgroundColor(Integer.parseInt(color));
+        }
     }
 
     @Override
