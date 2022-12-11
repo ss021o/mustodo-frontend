@@ -52,10 +52,10 @@ MusTodo 서비스는 모바일에서 쉽고 간단한 조작으로 스마트한 
 
 ### 4️⃣ 참고 자료
 
-- [Android Api : Retrofit2 : 2.9.0]("https://square.github.io/retrofit/")
-- [Android Calendar]("https://github.com/SundeepK/CompactCalendarView")
-- [Android Color Picker]("https://github.com/kristiyanP/colorpicker")
-- [Android Img URl]("https://bumptech.github.io/glide/")
+- [Android Api : Retrofit2 : 2.9.0] ("https://square.github.io/retrofit/")
+- [Android Calendar] ("https://github.com/SundeepK/CompactCalendarView")
+- [Android Color Picker] ("https://github.com/kristiyanP/colorpicker")
+- [Android Img URl] ("https://bumptech.github.io/glide/")
 
 ### 5️⃣ 라이센스
 
