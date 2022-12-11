@@ -12,13 +12,14 @@ import com.cemo.mustodo_test.R;
 import com.cemo.mustodo_test.todo.TodoData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DiaryAdapter extends BaseAdapter {
     Context mContext = null;
     LayoutInflater mLayoutInflater = null;
-    ArrayList<DiaryData> sample;
+    List<DiaryData> sample;
 
-    public DiaryAdapter(Context context, ArrayList<DiaryData> data) {
+    public DiaryAdapter(Context context, List<DiaryData> data) {
         mContext = context;
         sample = data;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -41,17 +42,13 @@ public class DiaryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View converView, ViewGroup parent) {
-        View view = mLayoutInflater.inflate(R.layout.item_lvdiaryitem, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_lvdiaryitem, null, false);
 
         TextView diary_title = (TextView) view.findViewById(R.id.diary_title);
         TextView diary_contents = (TextView) view.findViewById(R.id.diary_contents);
-        TextView dlike_counts = (TextView) view.findViewById(R.id.dlike_counts);
-        TextView dcomment_counts = (TextView) view.findViewById(R.id.dcomment_counts);
 
         diary_title.setText(sample.get(position).getDiaryTitle());
         diary_contents.setText(sample.get(position).getDiaryContents());
-        dlike_counts.setText(String.valueOf(sample.get(position).getDiaryLike()) );
-        dcomment_counts.setText(String.valueOf(sample.get(position).getDiaryComment()) );
 
         return view;
     }

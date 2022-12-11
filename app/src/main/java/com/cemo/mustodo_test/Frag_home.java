@@ -27,6 +27,8 @@ import com.cemo.mustodo_test.api.RetrofitClient;
 import com.cemo.mustodo_test.api.ServiceInterface;
 import com.cemo.mustodo_test.api.UserData;
 import com.cemo.mustodo_test.api.UserResponse;
+import com.cemo.mustodo_test.api.diary.DiaryResponse;
+import com.cemo.mustodo_test.api.diary.DiaryServiceInterface;
 import com.cemo.mustodo_test.api.todo.TodoDayData;
 import com.cemo.mustodo_test.api.todo.TodoDayResponse;
 import com.cemo.mustodo_test.api.todo.TodoMonthData;
@@ -34,6 +36,7 @@ import com.cemo.mustodo_test.api.todo.TodoMonthResponse;
 import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
 import com.cemo.mustodo_test.data.dataControl;
 import com.cemo.mustodo_test.data.dataHelper;
+import com.cemo.mustodo_test.diary.DiaryAdapter;
 import com.cemo.mustodo_test.diary.DiaryData;
 import com.cemo.mustodo_test.todo.TodoData;
 import com.cemo.mustodo_test.todo.recyclerlist.TodoRecyclerAdapter;
@@ -44,6 +47,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -62,16 +66,11 @@ public class Frag_home extends Fragment {
 
     private ImageView profile_view;
 
-    private Button todoBtn, projectBtn;
+    private Button todoBtn, diaryBtn;
     Boolean activeBtn;
 
-    //    private ListView todoView, diaryView, lvtodoList;
-    private ListView todoView, diaryView;
+    private ListView diaryView;
     private RecyclerView lvtodoList;
-    TodoRecyclerAdapter adapter;
-
-    ArrayList<TodoData> todoDataList = new ArrayList<TodoData>();
-//    TodoAdapter myAdapter;
 
     ArrayList<DiaryData> diaryDataList;
 
@@ -80,7 +79,9 @@ public class Frag_home extends Fragment {
 
     private ServiceInterface service;
     private TodoServiceInterface todoService;
+    private DiaryServiceInterface diaryService;
 
+    private Date selectedDate = new Date();
 
     private dataHelper helper;
     private dataControl sqlite;
@@ -99,6 +100,7 @@ public class Frag_home extends Fragment {
         service = RetrofitClient.getClient().create(ServiceInterface.class);
 
         todoService = RetrofitClient.getClient().create(TodoServiceInterface.class);
+        diaryService = RetrofitClient.getClient().create(DiaryServiceInterface.class);
 
         Bundle extra = getArguments();
 
@@ -122,7 +124,7 @@ public class Frag_home extends Fragment {
         profile_view.setClipToOutline(true);
 
         todoBtn = view.findViewById(R.id.todoBtn);
-        projectBtn = view.findViewById(R.id.projectBtn);
+        diaryBtn = view.findViewById(R.id.projectBtn);
 
         lvtodoList = view.findViewById(R.id.lvtodoItem);
 
@@ -138,11 +140,12 @@ public class Frag_home extends Fragment {
             }
         });
 
-        projectBtn.setOnClickListener(new View.OnClickListener() {
+        diaryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 activeBtn = false;
                 SetBtnFocus(activeBtn);
+                getDiaryByDay();
             }
         });
 
@@ -171,6 +174,7 @@ public class Frag_home extends Fragment {
             public void onDayClick(Date dateClicked) {
                 List<Event> events = monthView.getEvents(dateClicked);
 
+                selectedDate = dateClicked;
                 if (activeBtn) {
                     try {
                         if (mode.equals("GUEST")) {
@@ -183,6 +187,7 @@ public class Frag_home extends Fragment {
                     }
                 } else {
                     Toast.makeText(getContext(), "해당 날짜 일기 보기: " + dateClicked, Toast.LENGTH_SHORT).show();
+                    getDiaryByDay();
                 }
 
             }
@@ -237,8 +242,6 @@ public class Frag_home extends Fragment {
                 }
             }
         });
-
-
         setDiaryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -257,8 +260,37 @@ public class Frag_home extends Fragment {
             }
         });
 
+        diaryView = view.findViewById(R.id.lvdiaryItem);
 
         return view;
+    }
+
+    private void getDiaryByDay() {
+        long time = (long) selectedDate.getTime();
+        long timenow = (long) Math.floor(time / 1000L);
+
+        diaryService.getDiaryDay(userNick, String.valueOf(timenow)).enqueue(new Callback<DiaryResponse>() {
+            @Override
+            public void onResponse(Call<DiaryResponse> call, Response<DiaryResponse> response) {
+                if (response.isSuccessful()) {
+                    DiaryResponse res = response.body();
+
+                    List<DiaryData> ja = res.getData();
+                    if (ja == null) {
+                        ja = new ArrayList<>();
+                    }
+                    DiaryAdapter adapter = new DiaryAdapter(getContext(), ja);
+                    diaryView.setAdapter(adapter);
+                } else {
+                    System.out.println("실패");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DiaryResponse> call, Throwable t) {
+
+            }
+        });
     }
 
     public void InitializeTodoData(List<TodoDayData> dataItems) {
@@ -288,10 +320,6 @@ public class Frag_home extends Fragment {
         } catch (Error e) {
             e.printStackTrace();
         }
-    }
-
-    public void InitializeDiaryData() {
-        diaryDataList.add(new DiaryData("오늘의 일기", "인간의 같이 눈에 풍부하게 관현악이며, 주는 착목한는 그들은 우리의 따뜻한 있다.", "", "2022-12-08", 125, 150));
     }
 
     public void toggleFab() {
@@ -326,27 +354,32 @@ public class Frag_home extends Fragment {
         fabMain_status = !fabMain_status;
     }
 
-
     public void SetBtnFocus(boolean check) {
 
         if (check) {
             todoBtn.setBackground(getResources().getDrawable(R.drawable.btn_solid_02));
             todoBtn.setTextColor(getResources().getColor(R.color.white));
 
-            projectBtn.setBackground(getResources().getDrawable(R.drawable.btn_line_03));
-            projectBtn.setTextColor(getResources().getColor(R.color.main));
+            diaryBtn.setBackground(getResources().getDrawable(R.drawable.btn_line_03));
+            diaryBtn.setTextColor(getResources().getColor(R.color.main));
 
             lvtodoList.setVisibility(View.VISIBLE);
             diaryView.setVisibility(View.GONE);
+            try {
+                getTodoListsDate(userNick, selectedDate.toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         } else {
             todoBtn.setBackground(getResources().getDrawable(R.drawable.btn_line_02));
             todoBtn.setTextColor(getResources().getColor(R.color.main));
 
-            projectBtn.setBackground(getResources().getDrawable(R.drawable.btn_solid_03));
-            projectBtn.setTextColor(getResources().getColor(R.color.white));
+            diaryBtn.setBackground(getResources().getDrawable(R.drawable.btn_solid_03));
+            diaryBtn.setTextColor(getResources().getColor(R.color.white));
 
-            //diaryView.setVisibility(View.VISIBLE);
-            //todoView.setVisibility(View.GONE);
+            diaryView.setVisibility(View.VISIBLE);
+            lvtodoList.setVisibility(View.GONE);
+            getDiaryByDay();
         }
 
     }
@@ -447,11 +480,9 @@ public class Frag_home extends Fragment {
 
     }
 
-
     public void getTodoListsDate(String nickname, String selDate) throws ParseException {
 
-        Date date = new Date(selDate);
-        long time = (long) date.getTime();
+        long time = (long) selectedDate.getTime();
         long timenow = (long) Math.floor(time / 1000L);
 
 
@@ -494,7 +525,6 @@ public class Frag_home extends Fragment {
 
         return formattedDate;
     }
-
 
     private void getTodoListsToday(String nickname) {
         todoService.getTodo(nickname).enqueue(new Callback<TodoDayResponse>() {
@@ -564,6 +594,5 @@ public class Frag_home extends Fragment {
             }
         });
     }
-
 
 }

@@ -8,16 +8,12 @@ public class DiaryData {
     private String contents;
     private String imgUrl;
     private String date;
-    private int like;
-    private int comment;
 
-    public DiaryData(String title, String contents, String imgUrl, String date, int like, int comment){
+    public DiaryData(String title, String contents, String imgUrl, String date){
         this.title = title;
         this.contents = contents;
         this.imgUrl = imgUrl;
         this.date = date;
-        this.like = like;
-        this.comment = comment;
     }
 
     public String getDiaryTitle()
@@ -35,14 +31,6 @@ public class DiaryData {
     public String getDiaryDate()
     {
         return this.date;
-    }
-    public int getDiaryLike()
-    {
-        return this.like;
-    }
-    public int getDiaryComment()
-    {
-        return this.comment;
     }
 
 }

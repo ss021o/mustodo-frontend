@@ -24,4 +24,8 @@ public interface DiaryServiceInterface {
 
     @GET("/")
     Call<Object> index();
+
+    @GET("{nickname}/diary/d/{date}")
+    Call<DiaryResponse> getDiaryDay(@Path("nickname") String nickname,
+                                    @Path("date") String date);
 }

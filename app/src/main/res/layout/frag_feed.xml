@@ -41,11 +41,10 @@
 
     <ListView
         android:id="@+id/feed_diary_layout"
-        android:visibility="gone"
+        android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null"
-        android:layout_weight="1"/>
+        android:layout_height="0dp"
+        android:divider="@null"/>
 
 
 </LinearLayout>
