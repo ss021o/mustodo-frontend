@@ -65,7 +65,7 @@ public class Frag_home extends Fragment {
     private Button todoBtn, projectBtn;
     Boolean activeBtn;
 
-//    private ListView todoView, diaryView, lvtodoList;
+    //    private ListView todoView, diaryView, lvtodoList;
     private ListView todoView, diaryView;
     private RecyclerView lvtodoList;
     TodoRecyclerAdapter adapter;
@@ -106,14 +106,14 @@ public class Frag_home extends Fragment {
         TextView txtUserNick = view.findViewById(R.id.textUserNick);
         TextView txtUserMsg = view.findViewById(R.id.profile_msg);
 
-        if(extra != null){
+        if (extra != null) {
             mode = extra.getString("mode");
 
-            if(mode.equals("GUEST")){
+            if (mode.equals("GUEST")) {
                 txtUserNick.setText("게스트");
                 txtUserMsg.setText("로그인을 하면 더 많은 기능을 이용할 수 있어요!");
                 profile_view.setImageResource(R.drawable.noimg);
-            }else if(mode.equals("LOGIN_USER")){
+            } else if (mode.equals("LOGIN_USER")) {
                 userEmail = extra.getString("userEmail");
                 checkUserInfo(new UserData(userEmail));
             }
@@ -166,24 +166,23 @@ public class Frag_home extends Fragment {
         monthView.setFirstDayOfWeek(Calendar.MONDAY);
 
 
-
         monthView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
                 List<Event> events = monthView.getEvents(dateClicked);
 
-                if (activeBtn){
+                if (activeBtn) {
                     try {
-                        if(mode.equals("GUEST")){
-                            Toast.makeText(getContext(),"로그인을 하면 더 많은 기능을 사용할 수 있어요!", Toast.LENGTH_SHORT).show();
-                        }else if(mode.equals("LOGIN_USER")){
+                        if (mode.equals("GUEST")) {
+                            Toast.makeText(getContext(), "로그인을 하면 더 많은 기능을 사용할 수 있어요!", Toast.LENGTH_SHORT).show();
+                        } else if (mode.equals("LOGIN_USER")) {
                             getTodoListsDate(userNick, String.valueOf(dateClicked));
                         }
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                }else{
-                    Toast.makeText(getContext(), "해당 날짜 일기 보기: "  + dateClicked, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "해당 날짜 일기 보기: " + dateClicked, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -214,7 +213,6 @@ public class Frag_home extends Fragment {
         setDiaryBtn = (FloatingActionButton) view.findViewById(R.id.fab_setDiary);
 
 
-
         WriteActionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,11 +223,11 @@ public class Frag_home extends Fragment {
         setTodoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mode.equals("GUEST")){
-                    Toast.makeText(getContext(),"로그인을 하면 더 많은 기능을 사용할 수 있어요!", Toast.LENGTH_SHORT).show();
+                if (mode.equals("GUEST")) {
+                    Toast.makeText(getContext(), "로그인을 하면 더 많은 기능을 사용할 수 있어요!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), StartActivity.class);
                     startActivity(intent);
-                }else if(mode.equals("LOGIN_USER")){
+                } else if (mode.equals("LOGIN_USER")) {
                     Intent intent = new Intent(getActivity(), TodoActivity.class);
                     intent.putExtra("userNick", userNick);
                     intent.putExtra("userEmail", userEmail);
@@ -244,11 +242,11 @@ public class Frag_home extends Fragment {
         setDiaryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mode.equals("GUEST")){
-                    Toast.makeText(getContext(),"로그인을 하면 더 많은 기능을 사용할 수 있어요!", Toast.LENGTH_SHORT).show();
+                if (mode.equals("GUEST")) {
+                    Toast.makeText(getContext(), "로그인을 하면 더 많은 기능을 사용할 수 있어요!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), StartActivity.class);
                     startActivity(intent);
-                }else if(mode.equals("LOGIN_USER")){
+                } else if (mode.equals("LOGIN_USER")) {
                     Intent intent = new Intent(getActivity(), DiaryActivity.class);
                     intent.putExtra("userNick", userNick);
                     intent.putExtra("userEmail", userEmail);
@@ -260,14 +258,13 @@ public class Frag_home extends Fragment {
         });
 
 
-        return  view;
+        return view;
     }
 
-    public void InitializeTodoData(List<TodoDayData> dataItems)
-    {
+    public void InitializeTodoData(List<TodoDayData> dataItems) {
         try {
             List<TodoData> todoDataList = new ArrayList<>();
-            for (int i=0; i<dataItems.size(); i++) {
+            for (int i = 0; i < dataItems.size(); i++) {
                 TodoDayData dataItem = dataItems.get(i);
 
                 try {
@@ -288,21 +285,20 @@ public class Frag_home extends Fragment {
             }
             TodoRecyclerAdapter adapter = new TodoRecyclerAdapter(todoDataList);
             lvtodoList.setAdapter(adapter);
-        }catch (Error e){
+        } catch (Error e) {
             e.printStackTrace();
         }
     }
 
-    public void InitializeDiaryData()
-    {
-        diaryDataList.add(new DiaryData("오늘의 일기", "인간의 같이 눈에 풍부하게 관현악이며, 주는 착목한는 그들은 우리의 따뜻한 있다.","", "2022-12-08", 125, 150));
+    public void InitializeDiaryData() {
+        diaryDataList.add(new DiaryData("오늘의 일기", "인간의 같이 눈에 풍부하게 관현악이며, 주는 착목한는 그들은 우리의 따뜻한 있다.", "", "2022-12-08", 125, 150));
     }
 
     public void toggleFab() {
         LinearLayout todoLayout = view.findViewById(R.id.todo_layout);
         LinearLayout diaryLayout = view.findViewById(R.id.diary_layout);
 
-        if(fabMain_status) {
+        if (fabMain_status) {
             // 플로팅 액션 버튼 닫기
             // 애니메이션 추가
             ObjectAnimator fc_animation = ObjectAnimator.ofFloat(todoLayout, "translationY", 0f);
@@ -315,7 +311,7 @@ public class Frag_home extends Fragment {
             // 메인 플로팅 이미지 변경
             WriteActionBtn.setImageResource(R.drawable.plus_icon);
 
-        }else {
+        } else {
             todoLayout.setVisibility(View.VISIBLE);
             diaryLayout.setVisibility(View.VISIBLE);
             // 플로팅 액션 버튼 열기
@@ -331,11 +327,9 @@ public class Frag_home extends Fragment {
     }
 
 
+    public void SetBtnFocus(boolean check) {
 
-    public void SetBtnFocus(boolean check)
-    {
-
-        if(check){
+        if (check) {
             todoBtn.setBackground(getResources().getDrawable(R.drawable.btn_solid_02));
             todoBtn.setTextColor(getResources().getColor(R.color.white));
 
@@ -344,7 +338,7 @@ public class Frag_home extends Fragment {
 
             lvtodoList.setVisibility(View.VISIBLE);
             diaryView.setVisibility(View.GONE);
-        }else{
+        } else {
             todoBtn.setBackground(getResources().getDrawable(R.drawable.btn_line_02));
             todoBtn.setTextColor(getResources().getColor(R.color.main));
 
@@ -357,7 +351,7 @@ public class Frag_home extends Fragment {
 
     }
 
-    public void saveUserInfo(UserData data){
+    public void saveUserInfo(UserData data) {
 
         userEmail = data.getEmail();
         userId = data.getId();
@@ -370,15 +364,15 @@ public class Frag_home extends Fragment {
 
         txtUserNick.setText(userNick);
 
-        if(userMsg.equals("")){
+        if (userMsg.equals("")) {
             txtUserMsg.setText("프로필에 목표를 설정해보세요");
-        }else {
+        } else {
             txtUserMsg.setText(data.getMsg());
         }
 
-        if(userProfile.equals("")){
+        if (userProfile.equals("")) {
             profile_view.setImageResource(R.drawable.noimg);
-        }else{
+        } else {
             String imageUrl = "https://aws-tiqets-cdn.imgix.net/images/content/f02865ee82a44cf0a87e9f72f7258fa1.jpg?auto=format&fit=crop&ixlib=python-3.2.1&q=70&s=e70b1d80f5538f189ea48bea0c48e079";
             Glide.with(this).load(imageUrl).into(profile_view);
         }
@@ -388,7 +382,7 @@ public class Frag_home extends Fragment {
 
     }
 
-    public void getCalendarMonthInit(String selDate, int Count){
+    public void getCalendarMonthInit(String selDate, int Count) {
         final CompactCalendarView monthView = (CompactCalendarView) view.findViewById(R.id.month_view);
 
         try {
@@ -401,45 +395,45 @@ public class Frag_home extends Fragment {
 
             monthView.addEvent(ev2);
 
-        } catch(Exception e) {
-           e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public void getTodoListsMonthInit(String nickname){
+    public void getTodoListsMonthInit(String nickname) {
         Date date = new Date();
         long time = date.getTime();
 
         long timenow = (long) Math.floor(time / 1000L);
 
-        todoService.getTodoMonth(nickname,String.valueOf(timenow)).enqueue(new Callback<TodoMonthResponse>() {
+        todoService.getTodoMonth(nickname, String.valueOf(timenow)).enqueue(new Callback<TodoMonthResponse>() {
             @Override
             public void onResponse(Call<TodoMonthResponse> call, Response<TodoMonthResponse> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     TodoMonthResponse res = response.body();
 
-                    if(res.getCode() == 200){
-                        List<TodoMonthData> dataList = new ArrayList<> ();
+                    if (res.getCode() == 200) {
+                        List<TodoMonthData> dataList = new ArrayList<>();
 
                         List<TodoMonthData> ja = res.getData();
                         if (ja == null) {
                             ja = new ArrayList<>();
                         }
-                        for (int i=0; i<ja.size(); i++) {
+                        for (int i = 0; i < ja.size(); i++) {
                             TodoMonthData dataItem;
                             dataItem = ja.get(i);
 
                             getCalendarMonthInit(dataItem.getTodoDate(), dataItem.getCount());
                         }
 
-                    }else {
+                    } else {
 
                     }
 
-                }else{
+                } else {
                     try {
 
-                    }catch (Error e){
+                    } catch (Error e) {
                         e.printStackTrace();
                     }
                 }
@@ -453,10 +447,6 @@ public class Frag_home extends Fragment {
 
     }
 
-    public void getTodoListsMonth(String nickname, String selDate){
-
-    }
-
 
     public void getTodoListsDate(String nickname, String selDate) throws ParseException {
 
@@ -465,13 +455,13 @@ public class Frag_home extends Fragment {
         long timenow = (long) Math.floor(time / 1000L);
 
 
-        todoService.getTodoDay(nickname,String.valueOf(timenow)).enqueue(new Callback<TodoDayResponse>() {
+        todoService.getTodoDay(nickname, String.valueOf(timenow)).enqueue(new Callback<TodoDayResponse>() {
             @Override
             public void onResponse(Call<TodoDayResponse> call, Response<TodoDayResponse> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     TodoDayResponse res = response.body();
 
-                    if(res.getCode() == 200){
+                    if (res.getCode() == 200) {
                         List<TodoDayData> ja = res.getData();
 
                         if (ja == null) {
@@ -480,10 +470,10 @@ public class Frag_home extends Fragment {
                         InitializeTodoData(ja);
                     }
 
-                }else{
+                } else {
                     try {
 
-                    }catch (Error e){
+                    } catch (Error e) {
                         e.printStackTrace();
                     }
                 }
@@ -506,28 +496,28 @@ public class Frag_home extends Fragment {
     }
 
 
-    private void getTodoListsToday(String nickname){
+    private void getTodoListsToday(String nickname) {
         todoService.getTodo(nickname).enqueue(new Callback<TodoDayResponse>() {
             @Override
             public void onResponse(Call<TodoDayResponse> call, Response<TodoDayResponse> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     TodoDayResponse res = response.body();
 
-                    if(res.getCode() == 200){
+                    if (res.getCode() == 200) {
                         List<TodoDayData> ja = res.getData();
 
-                        if(ja != null){
+                        if (ja != null) {
                             InitializeTodoData(ja);
                         }
 
-                    }else {
+                    } else {
 
                     }
 
-                }else{
+                } else {
                     try {
 
-                    }catch (Error e){
+                    } catch (Error e) {
                         e.printStackTrace();
                     }
                 }
@@ -540,15 +530,15 @@ public class Frag_home extends Fragment {
         });
     }
 
-    private void checkUserInfo(UserData data){
+    private void checkUserInfo(UserData data) {
 
         service.userCheck(data).enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     UserResponse user_response = response.body();
 
-                    if(user_response != null){
+                    if (user_response != null) {
                         userId = user_response.getResult().getId();
                         userEmail = user_response.getResult().getEmail();
                         userNick = user_response.getResult().getNickname();
@@ -558,10 +548,10 @@ public class Frag_home extends Fragment {
                         saveUserInfo(new UserData(userId, userEmail, userNick, userMsg, userProfile));
                     }
 
-                }else{
+                } else {
                     try {
 
-                    }catch (Error e){
+                    } catch (Error e) {
                         e.printStackTrace();
                     }
                 }
@@ -574,7 +564,6 @@ public class Frag_home extends Fragment {
             }
         });
     }
-
 
 
 }
