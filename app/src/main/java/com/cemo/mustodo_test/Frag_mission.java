@@ -17,17 +17,12 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.cemo.mustodo_test.api.RetrofitClient;
 import com.cemo.mustodo_test.api.ServiceInterface;
-import com.cemo.mustodo_test.api.diary.DiaryServiceInterface;
 import com.cemo.mustodo_test.api.popular.PopularResponse;
 import com.cemo.mustodo_test.api.popular.PopularServiceInterface;
-import com.cemo.mustodo_test.api.todo.OpenResponse;
-import com.cemo.mustodo_test.api.todo.TodoDayData;
 import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
 import com.cemo.mustodo_test.popular.ImageSliderAdapter;
 import com.cemo.mustodo_test.popular.MsgAdapter;
 import com.cemo.mustodo_test.popular.MsgData;
-import com.cemo.mustodo_test.todo.OpenTodoAdaper;
-import com.cemo.mustodo_test.todo.TodoData;
 
 import java.util.ArrayList;
 import java.util.List;
