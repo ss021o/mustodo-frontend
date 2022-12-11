@@ -124,4 +124,24 @@ public class TodoDayData {
        this.groupName = groupName;
        this.groupColor = groupColor;
     }
+
+    @Override
+    public String toString() {
+        return "TodoDayData{" +
+                "id=" + id +
+                ", user_id=" + user_id +
+                ", nickname='" + nickname + '\'' +
+                ", profile='" + profile + '\'' +
+                ", mymsg='" + mymsg + '\'' +
+                ", group_id=" + group_id +
+                ", title='" + title + '\'' +
+                ", todoDate='" + todoDate + '\'' +
+                ", todoTime='" + todoTime + '\'' +
+                ", isCheck='" + isCheck + '\'' +
+                ", isOpen=" + isOpen +
+                ", isLevel=" + isLevel +
+                ", groupName='" + groupName + '\'' +
+                ", groupColor='" + groupColor + '\'' +
+                '}';
+    }
 }

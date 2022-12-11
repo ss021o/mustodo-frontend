@@ -54,7 +54,6 @@ public class TodoData {
     private int group_id;
 
 
-
     public int getId() {
         return id;
     }
@@ -168,6 +167,14 @@ public class TodoData {
         this.title = title;
         this.todo_check = todo_check;
         this.groupName = groupName;
+        this.groupColor = groupColor;
+    }
+
+    public TodoData(String userName, String title, String mymsg, String profile, String groupColor){
+        this.nickname = userName;
+        this.title = title;
+        this.mymsg = mymsg;
+        this.profile = profile;
         this.groupColor = groupColor;
     }
 }
