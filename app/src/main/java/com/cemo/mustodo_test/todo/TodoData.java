@@ -161,7 +161,8 @@ public class TodoData {
         this.isLevel = isLevel;
     }
 
-    public TodoData(boolean todo_check, String title, String todo_date, String todo_time, String groupName, String groupColor){
+    public TodoData(int id, boolean todo_check, String title, String todo_date, String todo_time, String groupName, String groupColor){
+        this.id = id;
         this.todo_date = todo_date;
         this.todo_time = todo_time;
         this.title = title;

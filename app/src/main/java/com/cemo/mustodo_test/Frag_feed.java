@@ -137,13 +137,13 @@ public class Frag_feed extends Fragment {
                     String todo_text = dataItem.getTitle();
                     String chkDate = dataItem.getTodoDate();
                     String chkTime = dataItem.getTodoTime();
-                    Boolean todo_check = dataItem.getCheck();
-
+                    String todo_check = dataItem.getCheck();
+                    boolean check = "1".equals(todo_check);
                     if(userProfile.equals("")){
                         userProfile = "noImg";
                     }
 
-                    todoOpenDataList.add(new TodoData(openId, openNick, userProfile, userMsg,group_id, todo_text, chkDate, chkTime, todo_check, 5));
+                    todoOpenDataList.add(new TodoData(openId, openNick, userProfile, userMsg,group_id, todo_text, chkDate, chkTime, check, 5));
                     openAdapter.notifyDataSetChanged();
                 }
 

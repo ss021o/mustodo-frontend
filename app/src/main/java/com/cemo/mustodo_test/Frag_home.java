@@ -263,39 +263,30 @@ public class Frag_home extends Fragment {
         return  view;
     }
 
-//    public void ClearTodo(){
-//        if(todoDataList != null){
-//            todoDataList.clear();
-//            myAdapter.notifyDataSetChanged();
-//        }
-//    }
-
     public void InitializeTodoData(List<TodoDayData> dataItems)
     {
         try {
-//            ClearTodo();
             List<TodoData> todoDataList = new ArrayList<>();
             for (int i=0; i<dataItems.size(); i++) {
                 TodoDayData dataItem = dataItems.get(i);
 
                 try {
+                    int id = dataItem.getId();
                     String todo_text = dataItem.getTitle();
-                    Boolean todo_check = dataItem.getCheck();
+                    String todo_check = dataItem.getCheck();
+                    System.out.println("todo_check = " + todo_check);
+                    boolean check = "1".equals(todo_check);
                     String chkDate = formatDateTime(dataItem.getTodoDate());
                     String chkTime = dataItem.getTodoTime();
                     String groupName = dataItem.getGroupName();
                     String groupColor = dataItem.getGroupColor();
 
-                    todoDataList.add(new TodoData(todo_check, todo_text, chkDate, chkTime, groupName, groupColor));
+                    todoDataList.add(new TodoData(id, check, todo_text, chkDate, chkTime, groupName, groupColor));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
             TodoRecyclerAdapter adapter = new TodoRecyclerAdapter(todoDataList);
-
-//            ViewGroup.LayoutParams params = lvtodoList.getLayoutParams();
-//            params.height = 240 * myAdapter.getCount();
-//            lvtodoList.setLayoutParams(params);
             lvtodoList.setAdapter(adapter);
         }catch (Error e){
             e.printStackTrace();

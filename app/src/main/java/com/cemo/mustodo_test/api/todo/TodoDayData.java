@@ -32,7 +32,7 @@ public class TodoDayData {
     private String todoTime;
 
     @SerializedName("isCheck")
-    private Boolean isCheck;
+    private String isCheck;
 
     @SerializedName("isOpen")
     private Boolean isOpen;
@@ -52,7 +52,7 @@ public class TodoDayData {
 
     public String getGroupColor() { return groupColor; }
 
-    public Boolean getCheck() { return isCheck; }
+    public String getCheck() { return isCheck; }
 
     public Boolean getOpen() { return isOpen; }
 
@@ -95,7 +95,7 @@ public class TodoDayData {
     }
 
 
-    public TodoDayData(int id, int user_id, String nickname, String profile, String mymsg, int group_id, String title, String todoDate, String todoTime, Boolean isCheck, Boolean isOpen, int isLevel) {
+    public TodoDayData(int id, int user_id, String nickname, String profile, String mymsg, int group_id, String title, String todoDate, String todoTime, String isCheck, Boolean isOpen, int isLevel) {
         this.id = id;
         this.user_id = user_id;
         this.nickname = nickname;
@@ -111,7 +111,7 @@ public class TodoDayData {
     }
 
 
-    public TodoDayData(int id, int user_id, int group_id, String title, String todoDate, String todoTime, Boolean isCheck, Boolean isOpen, int isLevel, String groupName, String groupColor) {
+    public TodoDayData(int id, int user_id, int group_id, String title, String todoDate, String todoTime, String isCheck, Boolean isOpen, int isLevel, String groupName, String groupColor) {
        this.id = id;
        this.user_id = user_id;
        this.group_id = group_id;
