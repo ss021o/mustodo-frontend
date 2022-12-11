@@ -1,13 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/todoGroup"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/category"
-        android:text="기본"
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="5dp"
+        app:cardCornerRadius="3dp">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/groupColor"
+                android:layout_width="3dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:background="#e14f50" />
+
+            <Button
+                android:id="@+id/groupName"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:background="@color/white"
+                android:text="  기본"
+                android:textAlignment="textStart"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <LinearLayout
+        android:id="@+id/todoItemLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="15dp"/>
 </LinearLayout>

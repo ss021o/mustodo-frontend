@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.cemo.mustodo_test.api.RetrofitClient;
@@ -34,8 +35,8 @@ import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
 import com.cemo.mustodo_test.data.dataControl;
 import com.cemo.mustodo_test.data.dataHelper;
 import com.cemo.mustodo_test.diary.DiaryData;
-import com.cemo.mustodo_test.todo.TodoAdapter;
 import com.cemo.mustodo_test.todo.TodoData;
+import com.cemo.mustodo_test.todo.recyclerlist.TodoRecyclerAdapter;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -64,10 +65,13 @@ public class Frag_home extends Fragment {
     private Button todoBtn, projectBtn;
     Boolean activeBtn;
 
-    private ListView todoView, diaryView, lvtodoList;
+//    private ListView todoView, diaryView, lvtodoList;
+    private ListView todoView, diaryView;
+    private RecyclerView lvtodoList;
+    TodoRecyclerAdapter adapter;
 
     ArrayList<TodoData> todoDataList = new ArrayList<TodoData>();
-    TodoAdapter myAdapter;
+//    TodoAdapter myAdapter;
 
     ArrayList<DiaryData> diaryDataList;
 
@@ -120,7 +124,9 @@ public class Frag_home extends Fragment {
         todoBtn = view.findViewById(R.id.todoBtn);
         projectBtn = view.findViewById(R.id.projectBtn);
 
-        todoView = view.findViewById(R.id.lvtodoItem);
+        lvtodoList = view.findViewById(R.id.lvtodoItem);
+
+//        todoView = view.findViewById(R.id.lvtodoItem);
         diaryView = view.findViewById(R.id.lvdiaryItem);
 
         todoBtn.setOnClickListener(new View.OnClickListener() {
@@ -254,23 +260,21 @@ public class Frag_home extends Fragment {
         });
 
 
-        lvtodoList = (ListView)view.findViewById(R.id.lvtodoItem);
-        myAdapter = new TodoAdapter(view.getContext(),todoDataList);
-
         return  view;
     }
 
-    public void ClearTodo(){
-        if(todoDataList != null){
-            todoDataList.clear();
-            myAdapter.notifyDataSetChanged();
-        }
-    }
+//    public void ClearTodo(){
+//        if(todoDataList != null){
+//            todoDataList.clear();
+//            myAdapter.notifyDataSetChanged();
+//        }
+//    }
 
     public void InitializeTodoData(List<TodoDayData> dataItems)
     {
         try {
-            ClearTodo();
+//            ClearTodo();
+            List<TodoData> todoDataList = new ArrayList<>();
             for (int i=0; i<dataItems.size(); i++) {
                 TodoDayData dataItem = dataItems.get(i);
 
@@ -279,18 +283,20 @@ public class Frag_home extends Fragment {
                     Boolean todo_check = dataItem.getCheck();
                     String chkDate = formatDateTime(dataItem.getTodoDate());
                     String chkTime = dataItem.getTodoTime();
+                    String groupName = dataItem.getGroupName();
+                    String groupColor = dataItem.getGroupColor();
 
-                    myAdapter.addItem(new TodoData(todo_check, todo_text, chkDate, chkTime));
+                    todoDataList.add(new TodoData(todo_check, todo_text, chkDate, chkTime, groupName, groupColor));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
             }
+            TodoRecyclerAdapter adapter = new TodoRecyclerAdapter(todoDataList);
 
-            ViewGroup.LayoutParams params = lvtodoList.getLayoutParams();
-            params.height = 240 * myAdapter.getCount();
-            lvtodoList.setLayoutParams(params);
-            lvtodoList.setAdapter(myAdapter);
+//            ViewGroup.LayoutParams params = lvtodoList.getLayoutParams();
+//            params.height = 240 * myAdapter.getCount();
+//            lvtodoList.setLayoutParams(params);
+            lvtodoList.setAdapter(adapter);
         }catch (Error e){
             e.printStackTrace();
         }
@@ -345,7 +351,7 @@ public class Frag_home extends Fragment {
             projectBtn.setBackground(getResources().getDrawable(R.drawable.btn_line_03));
             projectBtn.setTextColor(getResources().getColor(R.color.main));
 
-            todoView.setVisibility(View.VISIBLE);
+            lvtodoList.setVisibility(View.VISIBLE);
             diaryView.setVisibility(View.GONE);
         }else{
             todoBtn.setBackground(getResources().getDrawable(R.drawable.btn_line_02));
@@ -477,11 +483,10 @@ public class Frag_home extends Fragment {
                     if(res.getCode() == 200){
                         List<TodoDayData> ja = res.getData();
 
-                        if(ja != null){
-                            InitializeTodoData(ja);
-                        }else {
-                            ClearTodo();
+                        if (ja == null) {
+                            ja = new ArrayList<>();
                         }
+                        InitializeTodoData(ja);
                     }
 
                 }else{
