@@ -492,14 +492,12 @@ public class Frag_home extends Fragment {
                 if (response.isSuccessful()) {
                     TodoDayResponse res = response.body();
 
-                    if (res.getCode() == 200) {
-                        List<TodoDayData> ja = res.getData();
+                    List<TodoDayData> ja = res.getData();
 
-                        if (ja == null) {
-                            ja = new ArrayList<>();
-                        }
-                        InitializeTodoData(ja);
+                    if (ja == null) {
+                        ja = new ArrayList<>();
                     }
+                    InitializeTodoData(ja);
 
                 } else {
                     try {

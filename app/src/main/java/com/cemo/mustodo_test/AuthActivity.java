@@ -99,6 +99,7 @@ public class AuthActivity extends AppCompatActivity {
                     Intent intent = new Intent(AuthActivity.this, MainActivity.class);
 
                     intent.putExtra("email", intentEmail);
+                    intent.putExtra("mode", "LOGIN_USER");
 
                     startActivity(intent);
                     finish();
