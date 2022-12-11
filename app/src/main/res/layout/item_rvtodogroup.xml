@@ -9,7 +9,8 @@
         android:textOn="기본"
         android:textOff="기본"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_line_01"/>
 
     <ListView
         android:id="@+id/lvtodoItem"

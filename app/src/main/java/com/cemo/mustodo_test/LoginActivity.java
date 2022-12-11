@@ -6,20 +6,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
 import com.cemo.mustodo_test.api.LoginData;
 import com.cemo.mustodo_test.api.LoginResponse;
 import com.cemo.mustodo_test.api.RetrofitClient;
 import com.cemo.mustodo_test.api.ServiceInterface;
 import com.cemo.mustodo_test.api.SignUpData;
 import com.cemo.mustodo_test.api.SignUpResponse;
+import com.cemo.mustodo_test.api.UserData;
+import com.cemo.mustodo_test.api.UserResponse;
+import com.cemo.mustodo_test.data.dataControl;
+import com.cemo.mustodo_test.data.dataHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +30,7 @@ import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,6 +39,9 @@ public class LoginActivity extends AppCompatActivity {
     private Button LoginBtn;
 
     private ServiceInterface service;
+
+    private dataHelper helper;
+    private dataControl sqlite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,13 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
 
         service = RetrofitClient.getClient().create(ServiceInterface.class);
+
+        helper = new dataHelper(
+                LoginActivity.this, // context
+                "Mustodouser.db", // DB 파일 이름을 적어주시면 됩니다.
+                null, // Factory
+                1 // 현재 생성하는 DB의 버전을 설정합니다.
+        );
 
         LoginEmail = findViewById(R.id.login_email);
         LoginPassword = findViewById(R.id.login_pass);
@@ -82,13 +95,14 @@ public class LoginActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     LoginResponse result = response.body();
 
-                    Toast.makeText(getApplicationContext(),"로그인에 성공하였습니다.",Toast.LENGTH_SHORT).show();
+                    //Log.d("DATA : ", response.body().toString());
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("email", data.getEmail());
-
+                    intent.putExtra("mode", "LOGIN_USER");
                     startActivity(intent);
                     finish();
+
                 }else{
                     try {
                         String ERROR_MSG = response.errorBody().string();
@@ -120,12 +134,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<LoginResponse> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show();
-                // Log.e("Register : ", t.getMessage());
-                //t.printStackTrace();
+                Log.e("Register : ", t.getMessage());
+                t.printStackTrace();
 
             }
         });
     }
+
+
+
 
     private boolean isEmailValid(String email) {
         return email.contains("@");

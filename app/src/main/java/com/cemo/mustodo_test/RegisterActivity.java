@@ -16,10 +16,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.cemo.mustodo_test.api.RetrofitClient;
 import com.cemo.mustodo_test.api.ServiceInterface;
 import com.cemo.mustodo_test.api.SignUpData;
@@ -131,7 +127,8 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if( emailCheck && passwordCheck && nickCheck && termCheck ){
-            startRegister(new SignUpData(userEmail, userNick, userPassword, userPasswordCheck, userTermCheck));
+            //startRegister(new SignUpData(userEmail, userNick, userPassword, userPasswordCheck, userTermCheck));
+            startRegister(new SignUpData(userEmail, userNick, userPassword));
         }
 
     }

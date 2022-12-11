@@ -20,6 +20,7 @@
         />
 
     <LinearLayout
+        android:id="@+id/login_layout"
         android:layout_below="@+id/header_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,6 +52,7 @@
             android:textColor="@color/black"/>
 
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_alignParentBottom="true"

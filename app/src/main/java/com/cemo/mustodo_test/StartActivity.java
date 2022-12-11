@@ -5,13 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class StartActivity extends AppCompatActivity {
 
-    private Button LoginBtn;
-    private Button RegisterBtn;
+    private Button LoginBtn, RegisterBtn, findPassBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,8 @@ public class StartActivity extends AppCompatActivity {
 
         LoginBtn = findViewById(R.id.go_login_btn);
         RegisterBtn = findViewById(R.id.go_register_btn);
+
+        findPassBtn = findViewById(R.id.find_pass_btn);
 
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,5 +40,23 @@ public class StartActivity extends AppCompatActivity {
                 startActivity(new Intent(StartActivity.this, RegisterActivity.class));
             }
         });
+
+        findPassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(StartActivity.this, MainActivity.class);
+
+                intent.putExtra("mode", "GUEST");
+                intent.putExtra("email", "guestUser@user.com");
+
+                startActivity(intent);
+
+                finish();
+
+            }
+        });
+
+
     }
 }

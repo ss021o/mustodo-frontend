@@ -15,6 +15,15 @@
         android:theme="@style/Theme.Mustodo_test"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".StatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DiaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TodoActivity"
+            android:exported="false" />
+        <activity
             android:name=".AuthActivity"
             android:exported="false" />
         <activity
