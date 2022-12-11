@@ -32,7 +32,7 @@ public class TodoDayData {
     private String todoTime;
 
     @SerializedName("isCheck")
-    private Boolean isCheck;
+    private String isCheck;
 
     @SerializedName("isOpen")
     private Boolean isOpen;
@@ -41,18 +41,18 @@ public class TodoDayData {
     private int isLevel;
 
     @SerializedName("cate")
-    private String cate;
+    private String groupName;
 
     @SerializedName("color")
-    private String color;
+    private String groupColor;
 
     public int getId() { return id; }
 
     public String getTitle() { return title; }
 
-    public String getColor() { return color; }
+    public String getGroupColor() { return groupColor; }
 
-    public Boolean getCheck() { return isCheck; }
+    public String getCheck() { return isCheck; }
 
     public Boolean getOpen() { return isOpen; }
 
@@ -64,8 +64,8 @@ public class TodoDayData {
 
     public String getNickname() { return nickname; }
 
-    public String getCate() {
-        return cate;
+    public String getGroupName() {
+        return groupName;
     }
 
     public String getMymsg() {
@@ -95,7 +95,7 @@ public class TodoDayData {
     }
 
 
-    public TodoDayData(int id, int user_id, String nickname, String profile, String mymsg, int group_id, String title, String todoDate, String todoTime, Boolean isCheck, Boolean isOpen, int isLevel) {
+    public TodoDayData(int id, int user_id, String nickname, String profile, String mymsg, int group_id, String title, String todoDate, String todoTime, String isCheck, Boolean isOpen, int isLevel) {
         this.id = id;
         this.user_id = user_id;
         this.nickname = nickname;
@@ -111,7 +111,7 @@ public class TodoDayData {
     }
 
 
-    public TodoDayData(int id, int user_id, int group_id, String title, String todoDate, String todoTime, Boolean isCheck, Boolean isOpen, int isLevel, String cate, String color) {
+    public TodoDayData(int id, int user_id, int group_id, String title, String todoDate, String todoTime, String isCheck, Boolean isOpen, int isLevel, String groupName, String groupColor) {
        this.id = id;
        this.user_id = user_id;
        this.group_id = group_id;
@@ -121,7 +121,7 @@ public class TodoDayData {
        this.isCheck = isCheck;
        this.isOpen = isOpen;
        this.isLevel =isLevel;
-       this.cate = cate;
-       this.color = color;
+       this.groupName = groupName;
+       this.groupColor = groupColor;
     }
 }

@@ -1,20 +1,15 @@
 package com.cemo.mustodo_test;
 
-import static java.lang.System.currentTimeMillis;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,8 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.cemo.mustodo_test.api.RetrofitClient;
@@ -36,36 +31,25 @@ import com.cemo.mustodo_test.api.todo.TodoDayData;
 import com.cemo.mustodo_test.api.todo.TodoDayResponse;
 import com.cemo.mustodo_test.api.todo.TodoMonthData;
 import com.cemo.mustodo_test.api.todo.TodoMonthResponse;
-import com.cemo.mustodo_test.api.todo.TodoResponse;
 import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
 import com.cemo.mustodo_test.data.dataControl;
 import com.cemo.mustodo_test.data.dataHelper;
-import com.cemo.mustodo_test.diary.DiaryAdapter;
 import com.cemo.mustodo_test.diary.DiaryData;
-import com.cemo.mustodo_test.todo.TodoAdapter;
 import com.cemo.mustodo_test.todo.TodoData;
+import com.cemo.mustodo_test.todo.recyclerlist.TodoRecyclerAdapter;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,10 +65,13 @@ public class Frag_home extends Fragment {
     private Button todoBtn, projectBtn;
     Boolean activeBtn;
 
-    private ListView todoView, diaryView, lvtodoList;
+//    private ListView todoView, diaryView, lvtodoList;
+    private ListView todoView, diaryView;
+    private RecyclerView lvtodoList;
+    TodoRecyclerAdapter adapter;
 
     ArrayList<TodoData> todoDataList = new ArrayList<TodoData>();
-    TodoAdapter myAdapter;
+//    TodoAdapter myAdapter;
 
     ArrayList<DiaryData> diaryDataList;
 
@@ -136,7 +123,9 @@ public class Frag_home extends Fragment {
         todoBtn = view.findViewById(R.id.todoBtn);
         projectBtn = view.findViewById(R.id.projectBtn);
 
-        todoView = view.findViewById(R.id.lvtodoItem);
+        lvtodoList = view.findViewById(R.id.lvtodoItem);
+
+//        todoView = view.findViewById(R.id.lvtodoItem);
         diaryView = view.findViewById(R.id.lvdiaryItem);
 
         todoBtn.setOnClickListener(new View.OnClickListener() {
@@ -270,43 +259,34 @@ public class Frag_home extends Fragment {
         });
 
 
-        lvtodoList = (ListView)view.findViewById(R.id.lvtodoItem);
-        myAdapter = new TodoAdapter(view.getContext(),todoDataList);
-
         return  view;
-    }
-
-    public void ClearTodo(){
-        if(todoDataList != null){
-            todoDataList.clear();
-            myAdapter.notifyDataSetChanged();
-        }
     }
 
     public void InitializeTodoData(List<TodoDayData> dataItems)
     {
         try {
-            ClearTodo();
+            List<TodoData> todoDataList = new ArrayList<>();
             for (int i=0; i<dataItems.size(); i++) {
                 TodoDayData dataItem = dataItems.get(i);
 
                 try {
+                    int id = dataItem.getId();
                     String todo_text = dataItem.getTitle();
-                    Boolean todo_check = dataItem.getCheck();
+                    String todo_check = dataItem.getCheck();
+                    System.out.println("todo_check = " + todo_check);
+                    boolean check = "1".equals(todo_check);
                     String chkDate = formatDateTime(dataItem.getTodoDate());
                     String chkTime = dataItem.getTodoTime();
+                    String groupName = dataItem.getGroupName();
+                    String groupColor = dataItem.getGroupColor();
 
-                    myAdapter.addItem(new TodoData(todo_check, todo_text, chkDate, chkTime));
+                    todoDataList.add(new TodoData(id, check, todo_text, chkDate, chkTime, groupName, groupColor));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
             }
-
-            ViewGroup.LayoutParams params = lvtodoList.getLayoutParams();
-            params.height = 240 * myAdapter.getCount();
-            lvtodoList.setLayoutParams(params);
-            lvtodoList.setAdapter(myAdapter);
+            TodoRecyclerAdapter adapter = new TodoRecyclerAdapter(todoDataList);
+            lvtodoList.setAdapter(adapter);
         }catch (Error e){
             e.printStackTrace();
         }
@@ -361,7 +341,7 @@ public class Frag_home extends Fragment {
             projectBtn.setBackground(getResources().getDrawable(R.drawable.btn_line_03));
             projectBtn.setTextColor(getResources().getColor(R.color.main));
 
-            todoView.setVisibility(View.VISIBLE);
+            lvtodoList.setVisibility(View.VISIBLE);
             diaryView.setVisibility(View.GONE);
         }else{
             todoBtn.setBackground(getResources().getDrawable(R.drawable.btn_line_02));
@@ -410,18 +390,11 @@ public class Frag_home extends Fragment {
     public void getCalendarMonthInit(String selDate, int Count){
         final CompactCalendarView monthView = (CompactCalendarView) view.findViewById(R.id.month_view);
 
-        java.util.Date Now = new Date();
-        long NowTime = Now.getTime();
-
         try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
 
             Date date = inputFormat.parse(selDate);
-            String formattedDate = outputFormat.format(date);
-
-            long time = (long) date.getTime() + (86400L * 9L);
-
+            long time = date.getTime() + (86400 * 1000);
 
             Event ev2 = new Event(Color.GREEN, time, "todo");
 
@@ -430,13 +403,10 @@ public class Frag_home extends Fragment {
         } catch(Exception e) {
            e.printStackTrace();
         }
-
-
-        List<Event> events = monthView.getEvents(new Date(NowTime));
     }
 
     public void getTodoListsMonthInit(String nickname){
-        java.util.Date date = new Date();
+        Date date = new Date();
         long time = date.getTime();
 
         long timenow = (long) Math.floor(time / 1000L);
@@ -451,6 +421,9 @@ public class Frag_home extends Fragment {
                         List<TodoMonthData> dataList = new ArrayList<> ();
 
                         List<TodoMonthData> ja = res.getData();
+                        if (ja == null) {
+                            ja = new ArrayList<>();
+                        }
                         for (int i=0; i<ja.size(); i++) {
                             TodoMonthData dataItem;
                             dataItem = ja.get(i);
@@ -490,8 +463,6 @@ public class Frag_home extends Fragment {
         long time = (long) date.getTime();
         long timenow = (long) Math.floor(time / 1000L);
 
-        System.out.println(selDate);
-        System.out.println(timenow);
 
         todoService.getTodoDay(nickname,String.valueOf(timenow)).enqueue(new Callback<TodoDayResponse>() {
             @Override
@@ -502,11 +473,10 @@ public class Frag_home extends Fragment {
                     if(res.getCode() == 200){
                         List<TodoDayData> ja = res.getData();
 
-                        if(ja != null){
-                            InitializeTodoData(ja);
-                        }else {
-                            ClearTodo();
+                        if (ja == null) {
+                            ja = new ArrayList<>();
                         }
+                        InitializeTodoData(ja);
                     }
 
                 }else{
