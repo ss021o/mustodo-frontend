@@ -1,20 +1,15 @@
 package com.cemo.mustodo_test;
 
-import static java.lang.System.currentTimeMillis;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -36,36 +30,25 @@ import com.cemo.mustodo_test.api.todo.TodoDayData;
 import com.cemo.mustodo_test.api.todo.TodoDayResponse;
 import com.cemo.mustodo_test.api.todo.TodoMonthData;
 import com.cemo.mustodo_test.api.todo.TodoMonthResponse;
-import com.cemo.mustodo_test.api.todo.TodoResponse;
 import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
 import com.cemo.mustodo_test.data.dataControl;
 import com.cemo.mustodo_test.data.dataHelper;
-import com.cemo.mustodo_test.diary.DiaryAdapter;
 import com.cemo.mustodo_test.diary.DiaryData;
 import com.cemo.mustodo_test.todo.TodoAdapter;
 import com.cemo.mustodo_test.todo.TodoData;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -410,18 +393,11 @@ public class Frag_home extends Fragment {
     public void getCalendarMonthInit(String selDate, int Count){
         final CompactCalendarView monthView = (CompactCalendarView) view.findViewById(R.id.month_view);
 
-        java.util.Date Now = new Date();
-        long NowTime = Now.getTime();
-
         try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
 
             Date date = inputFormat.parse(selDate);
-            String formattedDate = outputFormat.format(date);
-
-            long time = (long) date.getTime() + (86400L * 9L);
-
+            long time = date.getTime() + (86400 * 1000);
 
             Event ev2 = new Event(Color.GREEN, time, "todo");
 
@@ -430,13 +406,10 @@ public class Frag_home extends Fragment {
         } catch(Exception e) {
            e.printStackTrace();
         }
-
-
-        List<Event> events = monthView.getEvents(new Date(NowTime));
     }
 
     public void getTodoListsMonthInit(String nickname){
-        java.util.Date date = new Date();
+        Date date = new Date();
         long time = date.getTime();
 
         long timenow = (long) Math.floor(time / 1000L);
@@ -451,6 +424,9 @@ public class Frag_home extends Fragment {
                         List<TodoMonthData> dataList = new ArrayList<> ();
 
                         List<TodoMonthData> ja = res.getData();
+                        if (ja == null) {
+                            ja = new ArrayList<>();
+                        }
                         for (int i=0; i<ja.size(); i++) {
                             TodoMonthData dataItem;
                             dataItem = ja.get(i);
@@ -490,8 +466,6 @@ public class Frag_home extends Fragment {
         long time = (long) date.getTime();
         long timenow = (long) Math.floor(time / 1000L);
 
-        System.out.println(selDate);
-        System.out.println(timenow);
 
         todoService.getTodoDay(nickname,String.valueOf(timenow)).enqueue(new Callback<TodoDayResponse>() {
             @Override
