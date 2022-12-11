@@ -58,6 +58,7 @@
                 android:paddingRight="15dp" />
 
             <ImageView
+                android:id="@+id/diaryImage"
                 android:scaleType="centerCrop"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
@@ -93,6 +94,7 @@
                     android:src="@drawable/gallery" />
 
                 <Button
+                    android:id="@+id/uploadImageBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/btn_line_01"
@@ -129,6 +131,7 @@
             </LinearLayout>
 
             <Button
+                android:id="@+id/diaryCreateBtn"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/btn_solid_01"
