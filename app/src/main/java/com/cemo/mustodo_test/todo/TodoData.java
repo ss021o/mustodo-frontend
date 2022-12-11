@@ -35,9 +35,17 @@ public class TodoData {
     @Expose
     private String todo_time;
 
+    @SerializedName("cate")
+    @Expose
+    private String groupName;
+
+    @SerializedName("color")
+    @Expose
+    private String groupColor;
+
 
     private Boolean isOpen;
-    private Boolean isCheck;
+    private Boolean check;
     private int isLevel;
 
     @SerializedName("id")
@@ -115,6 +123,13 @@ public class TodoData {
         return this.todo_check;
     }
 
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public String getGroupColor() {
+        return groupColor;
+    }
 
 //     "id": 5,
 //     "user_id": 1,
@@ -146,10 +161,12 @@ public class TodoData {
         this.isLevel = isLevel;
     }
 
-    public TodoData(boolean todo_check, String title, String todo_date, String todo_time){
+    public TodoData(boolean todo_check, String title, String todo_date, String todo_time, String groupName, String groupColor){
         this.todo_date = todo_date;
         this.todo_time = todo_time;
         this.title = title;
         this.todo_check = todo_check;
+        this.groupName = groupName;
+        this.groupColor = groupColor;
     }
 }

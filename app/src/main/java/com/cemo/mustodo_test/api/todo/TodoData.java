@@ -3,8 +3,9 @@ package com.cemo.mustodo_test.api.todo;
 import com.google.gson.annotations.SerializedName;
 
 public class TodoData {
-    @SerializedName("id")
+    @SerializedName("cate")
     private String todo_cate;
+    @SerializedName("color")
     private String todo_color;
 
     @SerializedName("title")
@@ -25,6 +26,7 @@ public class TodoData {
     @SerializedName("isLevel")
     private int isLevel;
 
+    @SerializedName("id")
     private int id;
 
     @SerializedName("group_id")
