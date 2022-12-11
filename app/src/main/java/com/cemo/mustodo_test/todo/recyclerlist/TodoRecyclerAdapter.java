@@ -80,6 +80,15 @@ public class TodoRecyclerAdapter extends RecyclerView.Adapter<TodoRecyclerAdapte
             content.setText(value.getTitle());
             date.setText(value.getTodoDate());
 
+            View sideColor = view.findViewById(R.id.groupColorSide);
+            String color = todoListMap.getKey().getGroupColor();
+            if (color.startsWith("#")) {
+                int parseColor = Color.parseColor(color);
+                sideColor.setBackgroundColor(parseColor);
+            } else {
+                sideColor.setBackgroundColor(Integer.parseInt(color));
+            }
+
             view.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v){
                     //해당 리스트 클릭시 이벤트
@@ -129,18 +138,17 @@ public class TodoRecyclerAdapter extends RecyclerView.Adapter<TodoRecyclerAdapte
         }
     }
 
-    private void addView(View view, LinearLayout linearLayout) {
-        if(view.getParent() != null) {
-            ((ViewGroup) view.getParent()).removeView(view);
-        }
-        linearLayout.addView(view);
-    }
-
     private void initGroup(@NonNull ViewHolder holder, TodoListMap todoListMap) {
         Button groupName = holder.todoGroup.findViewById(R.id.groupName);
         groupName.setText(todoListMap.getKey().getGroupName());
         LinearLayout groupColor = holder.todoGroup.findViewById(R.id.groupColor);
-        groupColor.setBackgroundColor(Color.parseColor(todoListMap.getKey().getGroupColor()));
+        String color = todoListMap.getKey().getGroupColor();
+        if (color.startsWith("#")) {
+            int parseColor = Color.parseColor(color);
+            groupColor.setBackgroundColor(parseColor);
+        } else {
+            groupColor.setBackgroundColor(Integer.parseInt(color));
+        }
     }
 
     @Override

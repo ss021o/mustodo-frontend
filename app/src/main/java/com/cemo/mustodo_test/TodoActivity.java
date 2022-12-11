@@ -238,8 +238,6 @@ public class TodoActivity extends AppCompatActivity {
 
                                 String colorText = String.valueOf(color);
 
-                                colorText.replace("-", "#");
-
                                 selColor = colorText;
 
                                 drawable.setColor(Integer.parseInt(colorText));
