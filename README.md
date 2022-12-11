@@ -46,6 +46,7 @@ MusTodo 서비스는 모바일에서 쉽고 간단한 조작으로 스마트한 
 - Node Js 16.13.2
 - npm 8.4.0
 - Android Java VERSION_1_8
+- MariaDB
 
 ### 3️⃣ 앱 소개
 
