@@ -53,4 +53,20 @@ public interface TodoServiceInterface {
     @GET("search/todo")
     Call<OpenResponse> getOpenTodoList();
 
+    @GET("{nickname}/todo/stat/t")
+    Call<StatsResponse> getTodoTodayStats(
+            @Path("nickname") String nickname
+    );
+
+    @GET("{nickname}/todo/stat/m/{date}/all")
+    Call<StatsMonthResponse> getTodoMonthTotalStats(
+            @Path("nickname") String nickname,
+            @Path("date") String date
+    );
+
+    @GET("{nickname}/todo/stat/m/{date}/checked")
+    Call<StatsMonthResponse> getTodoMonthCheckedStats(
+            @Path("nickname") String nickname,
+            @Path("date") String date
+    );
 }

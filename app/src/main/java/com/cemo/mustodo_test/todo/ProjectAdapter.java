@@ -2,7 +2,9 @@ package com.cemo.mustodo_test.todo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.cemo.mustodo_test.R;
@@ -54,12 +57,23 @@ public class ProjectAdapter extends BaseAdapter {
     public View getView(int position, View converView, ViewGroup parent) {
         View view = mLayoutInflater.inflate(R.layout.lv_todo_sheet_list, null);
 
+        final GradientDrawable drawable = (GradientDrawable) ContextCompat.getDrawable(mContext, R.drawable.btn_gray);
+
+
         TodoGroupData listViewItem = items.get(position);
 
         Button color_pro =view.findViewById(R.id.color_pro);
         TextView text_sheet_item = (TextView) view.findViewById(R.id.text_sheet_item);
 
         text_sheet_item.setText(items.get(position).getTitle());
+
+        if(items.get(position).getColor().contains("#")){
+            drawable.setColor(Color.parseColor(items.get(position).getColor()));
+        }else {
+            drawable.setColor(Integer.parseInt(items.get(position).getColor()));
+        }
+
+        color_pro.setBackground(drawable);
 
 
         LinearLayout clickLayout= (LinearLayout)view.findViewById(R.id.btItemsLayout);

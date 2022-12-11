@@ -1,8 +1,10 @@
 package com.cemo.mustodo_test;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
@@ -10,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +37,11 @@ import com.cemo.mustodo_test.api.todo.TodoResponse;
 import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
 import com.cemo.mustodo_test.todo.ProjectAdapter;
 import com.cemo.mustodo_test.todo.TodoData;
+
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,9 +49,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import petrov.kristiyan.colorpicker.ColorPicker;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+
 
 public class TodoActivity extends AppCompatActivity {
 
@@ -72,7 +81,7 @@ public class TodoActivity extends AppCompatActivity {
 
     ProjectAdapter myAdapter;
 
-    String userNick, userEmail, mode;
+    String userNick, userEmail, mode, selColor;
 
     static BottomSheetDialog bottomSheetDialog;
 
@@ -83,6 +92,8 @@ public class TodoActivity extends AppCompatActivity {
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
+
+        final GradientDrawable drawable = (GradientDrawable) ContextCompat.getDrawable(this, R.drawable.btn_gray);
 
         userNick = getIntent().getStringExtra("userNick");
         userEmail = getIntent().getStringExtra("userEmail");
@@ -139,7 +150,6 @@ public class TodoActivity extends AppCompatActivity {
         int alarmHour=0, alarmMinute=0;
         final String[] texthour = new String[1];
         final String[] textminute = new String[1];
-
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -200,8 +210,6 @@ public class TodoActivity extends AppCompatActivity {
         btnGroupCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(getApplicationContext(), "프로젝트 생성", Toast.LENGTH_SHORT).show();
                 bottomSheetDialog.dismiss();
 
                 View view2 = inflater.inflate(R.layout.bottom_sheet2, null, false);
@@ -209,15 +217,53 @@ public class TodoActivity extends AppCompatActivity {
 
                 bottomSheetDialog.show();
 
-                Button btnOK2, btnClose2;
+                Button btnOK2, btnClose2, sel_color_btn;
+
 
                 EditText group_id = view2.findViewById(R.id.group_id);
+
+                sel_color_btn = view2.findViewById(R.id.sel_color_btn);
+
+                sel_color_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bottomSheetDialog.dismiss();
+
+                        ColorPicker colorPicker = new ColorPicker(TodoActivity.this);
+                        colorPicker.show();
+                        colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+                            @Override
+                            public void onChooseColor(int position,int color) {
+                                System.out.println(color);
+
+                                String colorText = String.valueOf(color);
+
+                                colorText.replace("-", "#");
+
+                                selColor = colorText;
+
+                                drawable.setColor(Integer.parseInt(colorText));
+
+                                sel_color_btn.setBackground(drawable);
+
+                                bottomSheetDialog.show();
+                            }
+
+                            @Override
+                            public void onCancel(){
+                                // put code
+                                bottomSheetDialog.show();
+                            }
+                        });
+                    }
+                });
+
 
                 btnOK2 = view2.findViewById(R.id.btnOk2);
                 btnOK2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setTodoGroup(userNick, group_id.getText().toString(), "#cccccc");
+                        setTodoGroup(userNick, group_id.getText().toString(), selColor);
                         bottomSheetDialog.dismiss();
                     }
                 });
@@ -243,7 +289,6 @@ public class TodoActivity extends AppCompatActivity {
                 bottomSheetDialog.setContentView(view);
 
                 getTodoGroup(userNick);
-
 
                 repeatDataList1.clear();
 
@@ -517,7 +562,7 @@ public class TodoActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<TodoGroupResponse> call, Throwable t) {
-
+                t.printStackTrace();
             }
         });
 

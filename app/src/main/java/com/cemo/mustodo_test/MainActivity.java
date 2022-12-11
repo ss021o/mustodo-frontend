@@ -95,14 +95,11 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
 
-        //bundle.putInt("userId", result.getId());
         bundle.putString("mode", mode);
         bundle.putString("userEmail", email);
-        //bundle.putString("userNick", "asasasas");
-        //bundle.putString("userMsg", userMsg);
-        //bundle.putString("userProfile", userProfile);
 
         frag_home.setArguments(bundle);
+        frag_my.setArguments(bundle);
 
 
 

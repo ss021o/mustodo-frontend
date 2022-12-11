@@ -14,7 +14,7 @@
         android:id="@+id/action_mission"
         android:enabled="true"
         android:icon="@drawable/ic_mission"
-        android:title="Mission"/>
+        android:title="Popular"/>
     <item
         android:id="@+id/action_my"
         android:enabled="true"

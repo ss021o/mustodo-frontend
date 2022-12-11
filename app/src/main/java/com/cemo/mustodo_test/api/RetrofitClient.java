@@ -31,6 +31,7 @@ public class RetrofitClient {
             cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
 
             OkHttpClient client = new OkHttpClient.Builder()
+                    //.addNetworkInterceptor(interceptor)
                     .cookieJar(new JavaNetCookieJar(cookieManager)).build();
 
 

@@ -125,6 +125,7 @@ public class Frag_home extends Fragment {
             if(mode.equals("GUEST")){
                 txtUserNick.setText("게스트");
                 txtUserMsg.setText("로그인을 하면 더 많은 기능을 이용할 수 있어요!");
+                profile_view.setImageResource(R.drawable.noimg);
             }else if(mode.equals("LOGIN_USER")){
                 userEmail = extra.getString("userEmail");
                 checkUserInfo(new UserData(userEmail));
@@ -420,7 +421,7 @@ public class Frag_home extends Fragment {
             Date date = inputFormat.parse(selDate);
             String formattedDate = outputFormat.format(date);
 
-            long time = (long) date.getTime() + (86400L * 9L);
+            long time = (long) date.getTime() + (8640000L * 9L);
 
 
             Event ev2 = new Event(Color.GREEN, time, "todo");
