@@ -18,8 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cemo.mustodo_test.R;
 import com.cemo.mustodo_test.api.RetrofitClient;
-import com.cemo.mustodo_test.api.todo.OpenResponse;
-import com.cemo.mustodo_test.api.todo.TodoDayData;
 import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
 import com.cemo.mustodo_test.todo.TodoData;
 
