@@ -1,4 +1,4 @@
-package com.cemo.mustodo_test;
+package com.cemo.mustodo_test.feed;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.load.engine.Resource;
+import com.cemo.mustodo_test.R;
 import com.cemo.mustodo_test.api.RetrofitClient;
 import com.cemo.mustodo_test.api.diary.DiaryDayData;
 import com.cemo.mustodo_test.api.diary.DiaryServiceInterface;
