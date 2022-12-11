@@ -16,9 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cemo.mustodo_test.R;
 import com.cemo.mustodo_test.api.RetrofitClient;
 import com.cemo.mustodo_test.api.diary.DiaryServiceInterface;
+import com.cemo.mustodo_test.api.diary.OpenDiaryResponse;
 import com.cemo.mustodo_test.api.todo.OpenResponse;
 import com.cemo.mustodo_test.api.todo.TodoDayData;
 import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
+import com.cemo.mustodo_test.feed.diary.DiaryRecyclerAdapter;
+import com.cemo.mustodo_test.feed.diary.OpenDiaryData;
 import com.cemo.mustodo_test.feed.todo.TodoFeedRecyclerAdapter;
 import com.cemo.mustodo_test.todo.TodoData;
 
@@ -36,7 +39,7 @@ public class Frag_feed extends Fragment {
     private Button todoBtn, projectBtn;
     Boolean activeBtn;
 
-    private ListView diaryView;
+    private RecyclerView diaryView;
     private RecyclerView todoView;
 
     private TodoServiceInterface todoService;
@@ -97,8 +100,31 @@ public class Frag_feed extends Fragment {
             projectBtn.setBackground(getResources().getDrawable(R.drawable.btn_solid_03));
             projectBtn.setTextColor(getResources().getColor(R.color.white));
 
+            diaryService.getDiaryFeed().enqueue(new Callback<OpenDiaryResponse>() {
+                @Override
+                public void onResponse(Call<OpenDiaryResponse> call, Response<OpenDiaryResponse> response) {
+                    if (response.isSuccessful()) {
+                        OpenDiaryResponse res = response.body();
+
+                        List<OpenDiaryData> ja = res.getData();
+                        if (ja == null) {
+                            ja = new ArrayList<>();
+                        }
+                        DiaryRecyclerAdapter adapter = new DiaryRecyclerAdapter(ja);
+                        diaryView.setAdapter(adapter);
+                    } else {
+                        System.out.println("response = " + response);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<OpenDiaryResponse> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
             diaryView.setVisibility(View.VISIBLE);
             todoView.setVisibility(View.GONE);
+
         }
 
     }

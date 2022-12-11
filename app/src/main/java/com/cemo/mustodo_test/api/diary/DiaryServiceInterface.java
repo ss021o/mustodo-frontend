@@ -28,4 +28,7 @@ public interface DiaryServiceInterface {
     @GET("{nickname}/diary/d/{date}")
     Call<DiaryResponse> getDiaryDay(@Path("nickname") String nickname,
                                     @Path("date") String date);
+
+    @GET("diary")
+    Call<OpenDiaryResponse> getDiaryFeed();
 }
