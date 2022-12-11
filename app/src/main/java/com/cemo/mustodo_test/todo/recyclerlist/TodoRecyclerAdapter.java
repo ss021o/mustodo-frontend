@@ -17,6 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cemo.mustodo_test.R;
+import com.cemo.mustodo_test.api.RetrofitClient;
+import com.cemo.mustodo_test.api.todo.OpenResponse;
+import com.cemo.mustodo_test.api.todo.TodoDayData;
+import com.cemo.mustodo_test.api.todo.TodoServiceInterface;
 import com.cemo.mustodo_test.todo.TodoData;
 
 import java.util.ArrayList;
@@ -25,17 +29,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TodoRecyclerAdapter extends RecyclerView.Adapter<TodoRecyclerAdapter.ViewHolder> {
     Context context;
     List<TodoListMap> items;
+    private TodoServiceInterface todoService;
 
     @SuppressLint("NewApi")
     public TodoRecyclerAdapter(List<TodoData> items) {
+        todoService = RetrofitClient.getClient().create(TodoServiceInterface.class);
         Map<TodoGroupKey, List<TodoGroupValue>> todoMap = new HashMap<>();
 
         for (TodoData item : items) {
             TodoGroupKey key = new TodoGroupKey(item.getGroupName(), item.getGroupColor());
-            TodoGroupValue value = new TodoGroupValue(item.getTitle(), item.getTodoCheck(), item.getTodoDate());
+            TodoGroupValue value = new TodoGroupValue(item.getId(), item.getTitle(), item.getTodoCheck(), item.getTodoDate());
             todoMap.computeIfAbsent(key, k -> new ArrayList<>()).add(value);
         }
         this.items = todoMap.entrySet().stream()
@@ -59,7 +69,6 @@ public class TodoRecyclerAdapter extends RecyclerView.Adapter<TodoRecyclerAdapte
         initGroup(holder, todoListMap);
 
         LinearLayout todoLayout = holder.todoLayout;
-        System.out.println("todoLayout = " + todoLayout);
         for (TodoGroupValue value : todoListMap.getValue()) {
             View view = LayoutInflater.from(context).inflate(R.layout.item_lvtodoitem, null, false);
 
@@ -67,6 +76,8 @@ public class TodoRecyclerAdapter extends RecyclerView.Adapter<TodoRecyclerAdapte
             TextView content = view.findViewById(R.id.todo_text);
             TextView date = view.findViewById(R.id.todo_date);
 
+            System.out.println("value.getTodoId() = " + value.getTodoId());
+            System.out.println("value = " + value.isCheck());
             check.setChecked(value.isCheck());
             content.setText(value.getTitle());
             date.setText(value.getTodoDate());
@@ -87,9 +98,18 @@ public class TodoRecyclerAdapter extends RecyclerView.Adapter<TodoRecyclerAdapte
                         content.setPaintFlags(content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         date.setPaintFlags(date.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     }
-                    /*TODO
-                    서버에 checked 보내기
-                     */
+                    todoService.checkTodo("username", value.getTodoId(), value.isCheck()).enqueue(new Callback<Object>() {
+                        @Override
+                        public void onResponse(Call<Object> call, Response<Object> response) {
+                            if (response.isSuccessful()) {
+                                Object res = response.body();
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<Object> call, Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
                 }
             });
 

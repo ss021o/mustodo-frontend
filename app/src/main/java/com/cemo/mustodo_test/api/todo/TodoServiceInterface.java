@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -53,4 +54,6 @@ public interface TodoServiceInterface {
     @GET("search/todo")
     Call<OpenResponse> getOpenTodoList();
 
+    @PATCH("{nickname}/todo/{todoId}/check/{checked}")
+    Call<Object> checkTodo(@Path("nickname") String nickname, @Path("todoId") int todoId, @Path("checked") boolean checked);
 }
