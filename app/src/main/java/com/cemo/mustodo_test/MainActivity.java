@@ -8,23 +8,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.cemo.mustodo_test.api.RetrofitClient;
-import com.cemo.mustodo_test.api.ServiceInterface;
-import com.cemo.mustodo_test.api.UserData;
-import com.cemo.mustodo_test.api.UserResponse;
-import com.cemo.mustodo_test.data.dataControl;
-import com.cemo.mustodo_test.data.dataHelper;
+import com.cemo.mustodo_test.feed.Frag_feed;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
